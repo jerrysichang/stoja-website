@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Your friendly, yet impatient, pocket-sized focus buddy — Stoja for macOS."
+    />
+    <title>Stoja | Task Tracker for macOS</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <a class="brand" href="./index.html" aria-label="Stoja home">
+          <img class="brand-mark" src="./assets/stoja-icon.png" alt="" width="38" height="38" />
+        </a>
+        <nav class="top-nav" aria-label="Primary">
+          <button class="button button-primary" data-open-download>
+            Download Stoja
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container hero-inner">
+          <h1 class="display">Stoja</h1>
+          <img
+            class="app-shot"
+            src="./assets/stoja-app-hero.png"
+            alt="Stoja for Mac — task list, timer, and Add task controls"
+          />
+          <p class="tagline">
+            Your friendly,<br />
+            yet impatient<br />
+            pocket-sized<br />
+            focus buddy.
+          </p>
+          <button class="button button-primary hero-download" type="button" data-open-download>
+            Download for MacOS
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <nav class="footer-leading" aria-label="Footer primary">
+          <a class="link-muted" href="./pages/support.html">Support</a>
+          <button type="button" class="footer-text-btn link-muted" data-open-download>Download</button>
+        </nav>
+        <div class="legal-links">
+          <a class="link-muted" href="./pages/legal.html">Legal</a>
+          <a class="link-muted" href="./pages/terms.html">Terms of use</a>
+          <a class="link-muted" href="./pages/privacy.html">Privacy policy</a>
+          <span class="muted">© <span id="year"></span> Stoja</span>
+        </div>
+      </div>
+    </footer>
+
+    <div class="modal-overlay" id="download-modal" aria-hidden="true" role="dialog">
+      <div class="modal" aria-modal="true" aria-labelledby="download-title">
+        <h2 id="download-title">Download Stoja for macOS</h2>
+        <p class="muted">
+          Replace this placeholder link with your signed release asset, GitHub release URL, or
+          direct DMG file.
+        </p>
+        <div class="panel">
+          <p><strong>Current release:</strong> v0.1.0 (placeholder)</p>
+          <p>
+            <a class="button button-primary" href="https://github.com/" target="_blank" rel="noreferrer">
+              Download latest build
+            </a>
+          </p>
+          <p class="muted">Requires macOS 13 or newer.</p>
+        </div>
+        <div class="modal-actions">
+          <button class="button button-secondary" data-close-download>Close</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="./script.js"></script>
+  </body>
+</html>

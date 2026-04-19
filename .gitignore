@@ -1,0 +1,4 @@
+.DS_Store
+
+# Electron app lives alongside the static site; keep this repo Pages-focused.
+/Stoja-demo/

@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How Stoja Works</title>
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <a class="brand" href="../index.html" aria-label="Stoja home">
+          <img class="brand-mark" src="../assets/stoja-icon.png" alt="" width="38" height="38" />
+        </a>
+        <nav class="top-nav" aria-label="Primary">
+          <a class="link-muted" href="./support.html">Support</a>
+          <button class="button button-primary" type="button" data-open-download>
+            Download Stoja
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <main class="page-main">
+      <div class="container content-stack">
+        <h1 class="section-title">How it works</h1>
+        <p class="muted">Stoja is designed around urgency, not task list perfection.</p>
+
+        <section class="panel">
+          <h2>1) Capture tasks quickly</h2>
+          <p>Open Stoja and drop in what needs doing. No complex hierarchy, no setup tax.</p>
+        </section>
+
+        <section class="panel">
+          <h2>2) Feel time pressure</h2>
+          <p>Stoja keeps your attention constrained so tasks move from "maybe later" to "done".</p>
+        </section>
+
+        <section class="panel">
+          <h2>3) Review and repeat</h2>
+          <p>Clear completed tasks, adjust priority, and keep momentum with minimal overhead.</p>
+        </section>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <nav class="footer-leading" aria-label="Footer primary">
+          <a class="link-muted" href="./support.html">Support</a>
+          <button type="button" class="footer-text-btn link-muted" data-open-download>Download</button>
+        </nav>
+        <div class="legal-links">
+          <a class="link-muted" href="./legal.html">Legal</a>
+          <a class="link-muted" href="./terms.html">Terms of use</a>
+          <a class="link-muted" href="./privacy.html">Privacy policy</a>
+          <span class="muted">© <span id="year"></span> Stoja</span>
+        </div>
+      </div>
+    </footer>
+
+    <div class="modal-overlay" id="download-modal" aria-hidden="true" role="dialog">
+      <div class="modal" aria-modal="true" aria-labelledby="download-title">
+        <h2 id="download-title">Download Stoja for macOS</h2>
+        <p class="muted">
+          Replace this placeholder link with your signed release asset, GitHub release URL, or direct DMG file.
+        </p>
+        <div class="panel">
+          <p><strong>Current release:</strong> v0.1.0 (placeholder)</p>
+          <p>
+            <a class="button button-primary" href="https://github.com/" target="_blank" rel="noreferrer">
+              Download latest build
+            </a>
+          </p>
+          <p class="muted">Requires macOS 13 or newer.</p>
+        </div>
+        <div class="modal-actions">
+          <button class="button button-secondary" type="button" data-close-download>Close</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="../script.js"></script>
+  </body>
+</html>
