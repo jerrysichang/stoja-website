@@ -8,7 +8,13 @@
       content="Your friendly, yet impatient, pocket-sized focus buddy — Stoja for macOS."
     />
     <title>Stoja | Task Tracker for macOS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./hero-demo-app.css" />
   </head>
   <body>
     <header class="site-header">
@@ -28,11 +34,343 @@
       <section class="hero">
         <div class="container hero-inner">
           <h1 class="display">Stoja</h1>
-          <img
-            class="app-shot"
-            src="./assets/stoja-app-hero.png"
-            alt="Stoja for Mac — task list, timer, and Add task controls"
-          />
+
+          <div
+            class="hero-demo-stage"
+            aria-label="Interactive preview of Stoja — drag from the timer or empty task area"
+          >
+            <div class="hero-demo-pos" id="hero-demo-pos">
+              <div class="hero-demo-drift">
+              <div class="hero-demo-shell">
+                <div class="hero-demo-top-row">
+                  <button
+                    type="button"
+                    class="hero-demo-expand demo-ui demo-ui-primary"
+                    data-open-download
+                    aria-label="Collapse"
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <polyline
+                        points="6 15 12 9 18 15"
+                        stroke="currentColor"
+                        stroke-width="2.25"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </button>
+                  <div class="hero-demo-timer-hit" data-hero-drag tabindex="-1">
+                    <span class="hero-demo-clock">13:48</span>
+                  </div>
+                  <button type="button" class="hero-demo-face" data-open-download aria-label="Creature">
+                    <span class="hero-demo-creature-pill" aria-hidden="true">
+                      <img
+                        class="hero-demo-creature-mouth"
+                        src="./assets/creature-face/hopeful.svg"
+                        alt=""
+                        width="60"
+                        height="30"
+                        draggable="false"
+                      />
+                      <!-- Dot eyes drawn on canvas (hero-demo-eyes.js); mouth SVG from hero-demo-live.js -->
+                      <canvas class="hero-demo-creature-eyes" aria-hidden="true"></canvas>
+                    </span>
+                  </button>
+                </div>
+
+                <div class="hero-demo-toolbar">
+                  <button
+                    type="button"
+                    class="demo-ui demo-ui-ghost demo-ui-ghost--icon"
+                    data-open-download
+                    aria-label="Undo"
+                  >
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path
+                        d="M9 14 4 9l5-5"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    class="demo-ui demo-ui-ghost demo-ui-ghost--icon"
+                    data-open-download
+                    aria-label="Settings"
+                  >
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path
+                        d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" />
+                    </svg>
+                  </button>
+                  <button type="button" class="demo-ui demo-ui-ghost" data-open-download>Reset</button>
+                  <button type="button" class="demo-ui demo-ui-ghost" data-open-download>Pause</button>
+                  <button type="button" class="demo-ui demo-ui-ghost" data-open-download>Quit</button>
+                </div>
+
+                <ul class="hero-demo-tasks">
+                  <li class="hero-demo-task">
+                    <button
+                      type="button"
+                      class="demo-ui demo-ui-ghost demo-ui-ghost--icon hero-demo-edge-btn hero-demo-edge-delete"
+                      data-open-download
+                      aria-label="Delete task"
+                    >
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path
+                          d="M18 6 6 18M6 6l12 12"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </button>
+                    <button type="button" class="demo-task-title" data-open-download>
+                      <span class="demo-minutes-badge demo-minutes-badge--sm">4</span>
+                      <span class="demo-task-text">Fix clipping glitch</span>
+                    </button>
+                    <button
+                      type="button"
+                      class="demo-ui demo-ui-ghost demo-ui-ghost--icon hero-demo-edge-btn"
+                      data-open-download
+                      aria-label="Complete task"
+                    >
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path
+                          d="M20 6 9 17l-5-5"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </button>
+                  </li>
+                  <li class="hero-demo-task">
+                    <button
+                      type="button"
+                      class="demo-ui demo-ui-ghost demo-ui-ghost--icon hero-demo-edge-btn hero-demo-edge-delete"
+                      data-open-download
+                      aria-label="Delete task"
+                    >
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path
+                          d="M18 6 6 18M6 6l12 12"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </button>
+                    <button type="button" class="demo-task-title" data-open-download>
+                      <span class="demo-minutes-badge demo-minutes-badge--sm">4</span>
+                      <span class="demo-task-text">Send update to Syd</span>
+                    </button>
+                    <button
+                      type="button"
+                      class="demo-ui demo-ui-ghost demo-ui-ghost--icon hero-demo-edge-btn"
+                      data-open-download
+                      aria-label="Complete task"
+                    >
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path
+                          d="M20 6 9 17l-5-5"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </button>
+                  </li>
+                  <li class="hero-demo-task">
+                    <button
+                      type="button"
+                      class="demo-ui demo-ui-ghost demo-ui-ghost--icon hero-demo-edge-btn hero-demo-edge-delete"
+                      data-open-download
+                      aria-label="Delete task"
+                    >
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path
+                          d="M18 6 6 18M6 6l12 12"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </button>
+                    <button type="button" class="demo-task-title" data-open-download>
+                      <span class="demo-minutes-badge demo-minutes-badge--lg">8</span>
+                      <span class="demo-task-text">Add in easter egg</span>
+                    </button>
+                    <button
+                      type="button"
+                      class="demo-ui demo-ui-ghost demo-ui-ghost--icon hero-demo-edge-btn"
+                      data-open-download
+                      aria-label="Complete task"
+                    >
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path
+                          d="M20 6 9 17l-5-5"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </button>
+                  </li>
+                  <li class="hero-demo-task">
+                    <button
+                      type="button"
+                      class="demo-ui demo-ui-ghost demo-ui-ghost--icon hero-demo-edge-btn hero-demo-edge-delete"
+                      data-open-download
+                      aria-label="Delete task"
+                    >
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path
+                          d="M18 6 6 18M6 6l12 12"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </button>
+                    <button type="button" class="demo-task-title" data-open-download>
+                      <span class="demo-minutes-badge demo-minutes-badge--lg">8</span>
+                      <span class="demo-task-text">Finalize egg</span>
+                    </button>
+                    <button
+                      type="button"
+                      class="demo-ui demo-ui-ghost demo-ui-ghost--icon hero-demo-edge-btn"
+                      data-open-download
+                      aria-label="Complete task"
+                    >
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path
+                          d="M20 6 9 17l-5-5"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </button>
+                  </li>
+                  <li class="hero-demo-task">
+                    <button
+                      type="button"
+                      class="demo-ui demo-ui-ghost demo-ui-ghost--icon hero-demo-edge-btn hero-demo-edge-delete"
+                      data-open-download
+                      aria-label="Delete task"
+                    >
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path
+                          d="M18 6 6 18M6 6l12 12"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </button>
+                    <button type="button" class="demo-task-title" data-open-download>
+                      <span class="demo-minutes-badge demo-minutes-badge--sm">4</span>
+                      <span class="demo-task-text">Clean up canvas</span>
+                    </button>
+                    <button
+                      type="button"
+                      class="demo-ui demo-ui-ghost demo-ui-ghost--icon hero-demo-edge-btn"
+                      data-open-download
+                      aria-label="Complete task"
+                    >
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path
+                          d="M20 6 9 17l-5-5"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </button>
+                  </li>
+                  <li class="hero-demo-task">
+                    <button
+                      type="button"
+                      class="demo-ui demo-ui-ghost demo-ui-ghost--icon hero-demo-edge-btn hero-demo-edge-delete"
+                      data-open-download
+                      aria-label="Delete task"
+                    >
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path
+                          d="M18 6 6 18M6 6l12 12"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </button>
+                    <button type="button" class="demo-task-title" data-open-download>
+                      <span class="demo-minutes-badge demo-minutes-badge--lg">8</span>
+                      <span class="demo-task-text">Make a tea</span>
+                    </button>
+                    <button
+                      type="button"
+                      class="demo-ui demo-ui-ghost demo-ui-ghost--icon hero-demo-edge-btn"
+                      data-open-download
+                      aria-label="Complete task"
+                    >
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path
+                          d="M20 6 9 17l-5-5"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </button>
+                  </li>
+                </ul>
+
+                <button type="button" class="hero-demo-add demo-ui demo-ui-primary" data-open-download>
+                  <span>Add task</span>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path
+                      d="M12 5v14M5 12h14"
+                      stroke="currentColor"
+                      stroke-width="2.25"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                </button>
+              </div>
+              </div>
+            </div>
+          </div>
+
           <p class="tagline">
             Your friendly,<br />
             yet impatient<br />
@@ -84,5 +422,7 @@
     </div>
 
     <script src="./script.js"></script>
+    <script src="./hero-demo-live.js"></script>
+    <script src="./hero-demo-eyes.js"></script>
   </body>
 </html>

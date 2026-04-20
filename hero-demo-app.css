@@ -1,0 +1,439 @@
+/**
+ * Hero interactive preview — styled to match Stoja renderer “Midnight” shell
+ * (tokens.ts + shellThemes.ts + PrimaryButton / GhostButton / TaskBonusMinutesBadge).
+ */
+
+.hero-demo-stage {
+  position: sticky;
+  top: max(1rem, env(safe-area-inset-top));
+  width: min(280px, calc(100vw - 2.5rem));
+  min-height: min(380px, 52vh);
+  margin: 0 auto 1.75rem;
+  z-index: 35;
+  isolation: isolate;
+}
+
+/** Slow idle motion — transform stays off #hero-demo-pos so drag JS is unchanged */
+.hero-demo-drift {
+  animation: hero-demo-drift 44s ease-in-out infinite;
+  will-change: transform;
+}
+
+.hero-demo-pos.hero-demo--dragging .hero-demo-drift {
+  animation-play-state: paused;
+}
+
+@keyframes hero-demo-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  18% {
+    transform: translate3d(5px, -6px, 0) rotate(-0.45deg);
+  }
+  38% {
+    transform: translate3d(-6px, 4px, 0) rotate(0.5deg);
+  }
+  58% {
+    transform: translate3d(6px, 7px, 0) rotate(-0.3deg);
+  }
+  78% {
+    transform: translate3d(-5px, -4px, 0) rotate(0.4deg);
+  }
+}
+
+.hero-demo-pos {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(280px, calc(100vw - 2rem));
+  will-change: transform;
+}
+
+.hero-demo-pos.hero-demo--dragging {
+  cursor: grabbing;
+}
+
+/* Shell card — expanded solid surface (AppShell expandedSolidSurface) */
+.hero-demo-shell {
+  --demo-bg-opaque: rgb(24, 24, 26);
+  --demo-bg-elevated: rgba(44, 44, 48, 0.94);
+  --demo-border-subtle: rgba(255, 255, 255, 0.13);
+  --demo-text-primary: rgba(255, 255, 255, 0.92);
+  --demo-text-muted: rgba(255, 255, 255, 0.35);
+  --demo-accent: rgba(42, 235, 185, 0.97);
+  --demo-hover-accent: rgba(72, 252, 210, 0.99);
+  --demo-chiplg-fill: rgba(255, 255, 255, 0.96);
+  --demo-chiplg-text: rgb(24, 24, 26);
+  --demo-chiplg-border: rgba(24, 24, 26, 0.12);
+  --demo-chip-border: rgba(255, 255, 255, 0.45);
+  --demo-chip-muted-border: rgba(255, 255, 255, 0.24);
+
+  width: 100%;
+  box-sizing: border-box;
+  padding: 4px 12px 12px;
+  border-radius: 12px;
+  background: var(--demo-bg-opaque);
+  border: none;
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.45),
+    inset 0 0 0 1px var(--demo-border-subtle);
+  text-align: left;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  color: var(--demo-text-primary);
+}
+
+.hero-demo-top-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-top: 4px;
+  margin-bottom: 6px;
+}
+
+/* PrimaryButton — expand/collapse chevron (AppShell PrimaryButton + collapsed sizing) */
+.hero-demo-expand.demo-ui-primary {
+  flex-shrink: 0;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 45px;
+  min-height: 30px;
+  padding: 8px;
+  margin: 0;
+  border-radius: 10px;
+  border: 1px solid var(--demo-border-subtle);
+  background: var(--demo-bg-elevated);
+  color: var(--demo-accent);
+  font-family: inherit;
+  cursor: pointer;
+  transition:
+    opacity 120ms ease,
+    background-color 150ms ease,
+    border-color 150ms ease;
+}
+
+.hero-demo-expand.demo-ui-primary:hover:not(:disabled) {
+  background-color: rgba(52, 52, 56, 0.98) !important;
+  border-color: var(--demo-border-subtle) !important;
+}
+
+.hero-demo-expand.demo-ui-primary:active:not(:disabled) {
+  opacity: 0.9;
+}
+
+.hero-demo-timer-hit {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 4px 2px;
+  margin: -4px 0;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.hero-demo-timer-hit:active {
+  cursor: grabbing;
+}
+
+/* TimerDisplay compact — mono, timer + 1 px */
+.hero-demo-clock {
+  font-family: "DM Mono", ui-monospace, monospace;
+  font-size: 26px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  min-width: 5ch;
+  text-align: left;
+  color: var(--demo-text-primary);
+  opacity: 0.92;
+  line-height: 1;
+}
+
+/* CreatureFace pill variant — creatureShellFaceHeightPx 30 → 60×30, radii.control 10 (see AppShell + CreatureFace) */
+.hero-demo-face {
+  flex-shrink: 0;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 120ms ease;
+}
+
+.hero-demo-face:hover {
+  opacity: 0.94;
+}
+
+.hero-demo-creature-pill {
+  position: relative;
+  width: 60px;
+  height: 30px;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.hero-demo-creature-mouth {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.hero-demo-creature-eyes {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+}
+
+/* Toolbar — GhostButton row */
+.hero-demo-toolbar {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0;
+  margin: -3px -2px 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.hero-demo-toolbar::-webkit-scrollbar {
+  display: none;
+}
+
+.demo-ui {
+  border-radius: 10px !important;
+  transition:
+    opacity 120ms ease,
+    background-color 150ms ease,
+    border-color 150ms ease,
+    color 150ms ease;
+}
+
+.demo-ui:focus,
+.demo-ui:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.demo-ui-ghost {
+  flex-shrink: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 8px 12px;
+  border: 1px solid transparent !important;
+  background: transparent;
+  color: var(--demo-accent);
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.demo-ui-ghost:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  color: var(--demo-hover-accent) !important;
+}
+
+.demo-ui-ghost:active:not(:disabled) {
+  opacity: 0.9;
+}
+
+.demo-ui-ghost--icon {
+  padding: 8px !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+}
+
+.hero-demo-edge-btn {
+  align-self: stretch;
+  padding: 0 8px !important;
+  min-width: 16px;
+}
+
+.hero-demo-edge-btn svg {
+  display: block;
+}
+
+.hero-demo-edge-delete.demo-ui-ghost {
+  color: var(--demo-text-primary);
+}
+
+.hero-demo-edge-delete.demo-ui-ghost:hover:not(:disabled) {
+  color: var(--demo-hover-accent) !important;
+}
+
+/* Task list — TaskListPanel / TaskRow */
+.hero-demo-tasks {
+  list-style: none;
+  margin: 0 0 10px;
+  padding: 0;
+  width: 100%;
+  min-width: 0;
+  max-height: min(220px, 38vh);
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.hero-demo-tasks::-webkit-scrollbar {
+  display: none;
+  width: 0;
+}
+
+.hero-demo-task {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 0;
+  width: 100%;
+  min-width: 0;
+  list-style: none;
+}
+
+.hero-demo-task + .hero-demo-task {
+  margin-top: 2px;
+}
+
+.demo-task-title {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  min-width: 0;
+  margin: 0;
+  padding: 3px 7px;
+  border: 1px solid transparent;
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+  border-radius: 10px;
+  text-align: left;
+  font-size: 13px;
+  line-height: 1.35;
+  color: var(--demo-text-primary);
+  transition:
+    color 140ms ease,
+    background-color 150ms ease,
+    border-color 150ms ease;
+}
+
+.demo-task-title:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  color: var(--demo-hover-accent) !important;
+}
+
+.demo-task-title:hover:not(:disabled) .demo-minutes-badge--sm {
+  color: var(--demo-text-primary);
+}
+
+.demo-task-title:hover:not(:disabled) .demo-minutes-badge--lg {
+  color: var(--demo-chiplg-text);
+}
+
+.demo-task-text {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  user-select: text;
+}
+
+.demo-minutes-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  margin-right: 4px;
+  transform: translateY(-1px);
+  border-radius: 4px;
+  font-family: "DM Mono", ui-monospace, monospace;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+/* Small task chip — transparent fill (TaskBonusMinutesBadge transparentFill) */
+.demo-minutes-badge--sm {
+  padding: 1px 3px 1px;
+  min-width: 14px;
+  min-height: 14px;
+  border: 1px solid var(--demo-chip-border);
+  background-color: transparent;
+  color: var(--demo-text-primary);
+}
+
+/* Large task chip — solid light chip */
+.demo-minutes-badge--lg {
+  padding: 2px 3px 1px;
+  min-width: 16px;
+  min-height: 16px;
+  border: 1px solid var(--demo-chiplg-border);
+  background-color: var(--demo-chiplg-fill);
+  color: var(--demo-chiplg-text);
+}
+
+/* PrimaryButton — Add task */
+.hero-demo-add.demo-ui-primary {
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--demo-border-subtle);
+  background: var(--demo-bg-elevated);
+  color: var(--demo-accent);
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  line-height: 1.2;
+}
+
+.hero-demo-add.demo-ui-primary:hover:not(:disabled) {
+  background-color: rgba(52, 52, 56, 0.98) !important;
+  border-color: var(--demo-border-subtle) !important;
+}
+
+.hero-demo-add.demo-ui-primary:active:not(:disabled) {
+  opacity: 0.9;
+}
+
+.hero-demo-add svg {
+  flex-shrink: 0;
+}
+
+@media (max-width: 480px) {
+  .hero-demo-stage {
+    min-height: min(360px, 48vh);
+    margin-bottom: 1.25rem;
+  }
+}

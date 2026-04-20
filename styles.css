@@ -270,16 +270,6 @@ img {
   color: var(--color-accent);
 }
 
-.app-shot {
-  width: min(300px, 78vw);
-  max-height: min(62vh, 560px);
-  height: auto;
-  object-fit: contain;
-  border-radius: 14px;
-  border: 0;
-  box-shadow: none;
-}
-
 .hero-download {
   margin-top: 1rem;
   margin-bottom: 3.25rem;
@@ -455,15 +445,19 @@ img {
   position: fixed;
   inset: 0;
   z-index: 50;
-  display: none;
+  display: flex;
   align-items: center;
   justify-content: center;
   background: rgba(8, 10, 13, 0.93);
   padding: var(--space-5);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 240ms ease;
 }
 
 .modal-overlay.is-open {
-  display: flex;
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .modal {
@@ -473,6 +467,16 @@ img {
   border-radius: var(--radius-lg);
   padding: var(--space-6);
   box-shadow: var(--shadow-heavy);
+  transform: scale(0.96);
+  opacity: 0;
+  transition:
+    transform 260ms cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 220ms ease;
+}
+
+.modal-overlay.is-open .modal {
+  transform: scale(1);
+  opacity: 1;
 }
 
 .modal h2 {
