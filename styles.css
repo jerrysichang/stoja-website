@@ -600,7 +600,7 @@ img {
 
   .tagline {
     order: 2;
-    margin: 0 auto 4.5rem;
+    margin: 0 auto 3.25rem;
   }
 
   .hero-demo-stage {
@@ -609,7 +609,8 @@ img {
     left: auto;
     top: auto;
     transform: none !important;
-    margin: 0 0 2rem;
+    padding-top: 3.25rem;
+    margin: 0 0 1.25rem;
     min-height: auto;
   }
 
@@ -623,7 +624,7 @@ img {
 
   .hero-download {
     order: 4;
-    margin-top: 1.5rem;
+    margin-top: 0.65rem;
     margin-bottom: 0.4rem;
   }
 
