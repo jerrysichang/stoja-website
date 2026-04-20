@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
 
 :root {
-  --color-bg: #222;
+  --color-bg: #2a2a2a;
   --color-surface: #1b1e22;
   --color-surface-muted: #242931;
   --color-text: #f4f3ef;
@@ -53,6 +53,45 @@ body {
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
+  position: relative;
+}
+
+body.home-page {
+  text-shadow: 0 1px 10px rgba(42, 42, 42, 0.58);
+}
+
+body.home-page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: url("./assets/bg/cursor-spotlight-bg.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.4;
+  -webkit-mask-image: radial-gradient(
+    420px circle at var(--cursor-x, 50vw) var(--cursor-y, 50vh),
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0.92) 34%,
+    rgba(0, 0, 0, 0.55) 60%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  mask-image: radial-gradient(
+    420px circle at var(--cursor-x, 50vw) var(--cursor-y, 50vh),
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0.92) 34%,
+    rgba(0, 0, 0, 0.55) 60%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
+.site-header,
+main,
+.site-footer {
+  position: relative;
+  z-index: 1;
 }
 
 main {
@@ -87,7 +126,7 @@ img {
 .site-header {
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 40;
   flex-shrink: 0;
   padding: 1.35rem 0 2rem;
   background: linear-gradient(
@@ -252,7 +291,7 @@ img {
   /* Reference layout: headline dominates — scales with viewport width and caps very large on desktop */
   font-size: clamp(6rem, min(34vw, 36vh), 18rem);
   line-height: 0.82;
-  margin: 1.35rem 0 3.6rem;
+  margin: 1.35rem 0 18rem;
   padding: 0 0.02em;
   color: var(--color-accent);
   font-weight: 800;
@@ -260,7 +299,7 @@ img {
 }
 
 .tagline {
-  margin: 0 auto 2.65rem;
+  margin: 0 auto 4.2rem;
   max-width: min(28ch, 92vw);
   font-size: clamp(3.35rem, 12vw, 6.45rem);
   line-height: 1.05;
@@ -276,6 +315,8 @@ img {
   padding-inline: 1.55rem;
   padding-block: 0.72rem;
   font-size: 1rem;
+  position: relative;
+  z-index: 40;
 }
 
 .section {
@@ -340,7 +381,7 @@ img {
   gap: 0.45rem 0.85rem;
   justify-content: flex-end;
   align-items: center;
-  font-size: 0.66rem;
+  font-size: 0.54rem;
   line-height: 1.35;
 }
 
@@ -461,6 +502,7 @@ img {
 }
 
 .modal {
+  position: relative;
   width: min(620px, 100%);
   background: var(--color-surface);
   border: 1px solid var(--color-border);
@@ -481,13 +523,44 @@ img {
 
 .modal h2 {
   margin-top: 0;
+  padding-right: 2.25rem;
 }
 
-.modal-actions {
-  margin-top: var(--space-6);
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-3);
+.modal-close-btn {
+  position: absolute;
+  top: 0.9rem;
+  right: 0.95rem;
+  width: 2rem;
+  height: 2rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 1.72rem;
+  font-weight: 300;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition:
+    color 0.15s ease,
+    background-color 0.15s ease,
+    transform 0.12s ease;
+}
+
+.modal-close-btn:hover {
+  color: var(--color-text);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.modal-close-btn:active {
+  transform: scale(0.96);
+}
+
+.modal-close-btn:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
 }
 
 @media (max-width: 860px) {

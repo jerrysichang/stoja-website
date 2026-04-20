@@ -6,7 +6,7 @@
   const shell = document.querySelector(".hero-demo-shell");
   if (!shell) return;
 
-  const INITIAL_SEC = 13 * 60 + 48;
+  const INITIAL_SEC = 7 * 60 + 10;
 
   const CONFIG = {
     hopefulMinTimeSeconds: 420,
