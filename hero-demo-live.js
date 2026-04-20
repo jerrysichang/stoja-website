@@ -6,7 +6,7 @@
   const shell = document.querySelector(".hero-demo-shell");
   if (!shell) return;
 
-  const INITIAL_SEC = 7 * 60 + 10;
+  const INITIAL_SEC = 2 * 60 + 10;
 
   const CONFIG = {
     hopefulMinTimeSeconds: 420,
@@ -19,10 +19,12 @@
 
   const WARNING_THRESHOLD_SECONDS = 7 * 60;
   const CRITICAL_THRESHOLD_SECONDS = 4 * 60;
+  const RED_THRESHOLD_SECONDS = CRITICAL_THRESHOLD_SECONDS + 10;
   const ANGRY_HIDE_UNDER_SECONDS = 60;
   const DYING_RANDOM_SHOW_UNDER_SECONDS = 90;
   const LOW_TIME_TOGGLE_MIN_MS = 2800;
   const LOW_TIME_TOGGLE_MAX_MS = 4600;
+  const PANIC_START_SECONDS = CONFIG.urgentMinTimeSeconds + 10;
 
   let remaining = INITIAL_SEC;
   let lowTimeEmotion = "desperate";
@@ -31,6 +33,7 @@
 
   const clockEl = shell.querySelector(".hero-demo-clock");
   const faceImg = shell.querySelector(".hero-demo-creature-mouth");
+  const facePill = shell.querySelector(".hero-demo-creature-pill");
 
   function clamp(n, lo, hi) {
     return Math.min(hi, Math.max(lo, n));
@@ -88,9 +91,15 @@
   function applyTimerDigitStyle() {
     if (!clockEl) return;
     let color = "rgba(255, 255, 255, 0.92)";
-    if (remaining <= CRITICAL_THRESHOLD_SECONDS) color = "rgba(255, 120, 120, 0.95)";
+    if (remaining <= RED_THRESHOLD_SECONDS) color = "rgba(255, 120, 120, 0.95)";
     else if (remaining <= WARNING_THRESHOLD_SECONDS) color = "rgba(255, 200, 140, 0.95)";
     clockEl.style.color = color;
+  }
+
+  function applyPanicEffects() {
+    if (!facePill) return;
+    const isPanicked = remaining > 0 && remaining <= PANIC_START_SECONDS;
+    facePill.classList.toggle("hero-demo-creature-pill--panic", isPanicked);
   }
 
   function updateFace() {
@@ -111,7 +120,7 @@
   }
 
   function lowRotateLoop() {
-    if (remaining <= 0 || remaining > CONFIG.urgentMinTimeSeconds) {
+    if (remaining <= 0 || remaining > PANIC_START_SECONDS) {
       stopLowRotate();
       return;
     }
@@ -121,7 +130,7 @@
   }
 
   function maybeStartLowRotate() {
-    if (remaining <= 0 || remaining > CONFIG.urgentMinTimeSeconds) return;
+    if (remaining <= 0 || remaining > PANIC_START_SECONDS) return;
     if (lowRotateTimeoutId != null) return;
     lowRotateTimeoutId = window.setTimeout(lowRotateLoop, scheduleLowRotateDelayMs());
   }
@@ -139,8 +148,9 @@
     if (clockEl) clockEl.textContent = formatMmSs(remaining);
     applyTimerDigitStyle();
     updateFace();
+    applyPanicEffects();
 
-    if (remaining > CONFIG.urgentMinTimeSeconds) {
+    if (remaining > PANIC_START_SECONDS) {
       lowTimeEmotion = "desperate";
     }
     maybeStartLowRotate();
@@ -150,6 +160,7 @@
   applyTimerDigitStyle();
   faceImg?.setAttribute("data-emotion", "");
   updateFace();
+  applyPanicEffects();
   maybeStartLowRotate();
   tickId = window.setInterval(tick, 1000);
 })();

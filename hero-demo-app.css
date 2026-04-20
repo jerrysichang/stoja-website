@@ -166,6 +166,29 @@
   overflow: hidden;
 }
 
+.hero-demo-creature-pill.hero-demo-creature-pill--panic {
+  animation: hero-demo-face-panic-shake 120ms linear infinite;
+  transform-origin: center;
+}
+
+@keyframes hero-demo-face-panic-shake {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate3d(-0.8px, -0.3px, 0) rotate(-1.1deg);
+  }
+  50% {
+    transform: translate3d(0.9px, 0.2px, 0) rotate(1deg);
+  }
+  75% {
+    transform: translate3d(-0.6px, 0.4px, 0) rotate(-0.8deg);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+}
+
 .hero-demo-creature-mouth {
   position: absolute;
   inset: 0;

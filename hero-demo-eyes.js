@@ -137,10 +137,7 @@
     const rx = (EYE_RIGHT_PCT[0] / 100) * w;
     const ry = (EYE_RIGHT_PCT[1] / 100) * h;
 
-    let baseR = (h * DOT_DIAMETER_FRAC_OF_H) / 2;
-    if (emotion === "dying") {
-      baseR *= 0.55;
-    }
+    const baseR = (h * DOT_DIAMETER_FRAC_OF_H) / 2;
     const eyeR = Math.max(0, baseR);
 
     const idleMs = now - lastMoveAtMs;

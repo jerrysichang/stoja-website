@@ -404,10 +404,6 @@
     <div class="modal-overlay" id="download-modal" aria-hidden="true" role="dialog">
       <div class="modal" aria-modal="true" aria-labelledby="download-title">
         <h2 id="download-title">Ready to try Stoja?</h2>
-        <p class="muted">
-          Replace this placeholder link with your signed release asset, GitHub release URL, or
-          direct DMG file.
-        </p>
         <div class="panel">
           <p><strong>Current release:</strong> v0.1.0 (placeholder)</p>
           <p>
@@ -417,7 +413,17 @@
           </p>
           <p class="muted">Requires macOS 13 or newer.</p>
         </div>
-        <button type="button" class="modal-close-btn" data-close-download aria-label="Close modal">&times;</button>
+        <button type="button" class="modal-close-btn" data-close-download aria-label="Close modal">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path
+              d="M18 6 6 18M6 6l12 12"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
       </div>
     </div>
 

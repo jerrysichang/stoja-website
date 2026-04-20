@@ -36,6 +36,7 @@
 
 html {
   height: 100%;
+  scrollbar-gutter: stable;
 }
 
 html,
@@ -70,7 +71,7 @@ body.home-page::before {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  opacity: 0.4;
+  opacity: 0.5;
   -webkit-mask-image: radial-gradient(
     420px circle at var(--cursor-x, 50vw) var(--cursor-y, 50vh),
     rgba(0, 0, 0, 1) 0%,
@@ -316,7 +317,7 @@ img {
 }
 
 .hero-download {
-  margin-top: 6.5rem;
+  margin-top: 14.625rem;
   margin-bottom: 3.25rem;
   padding-inline: 1.55rem;
   padding-block: 0.72rem;
@@ -533,21 +534,19 @@ img {
 
 .modal h2 {
   margin-top: 0;
-  padding-right: 2.25rem;
+  padding-right: 3rem;
 }
 
 .modal-close-btn {
   position: absolute;
-  top: 0.9rem;
-  right: 0.95rem;
-  width: 2rem;
-  height: 2rem;
+  top: 0.7rem;
+  right: 0.7rem;
+  width: 2.7rem;
+  height: 2.7rem;
   border: 0;
   border-radius: 999px;
   background: transparent;
   color: var(--color-text-muted);
-  font-size: 1.72rem;
-  font-weight: 300;
   line-height: 1;
   display: inline-flex;
   align-items: center;
@@ -557,6 +556,12 @@ img {
     color 0.15s ease,
     background-color 0.15s ease,
     transform 0.12s ease;
+}
+
+.modal-close-btn svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  display: block;
 }
 
 .modal-close-btn:hover {
