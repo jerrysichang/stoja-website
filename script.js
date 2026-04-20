@@ -92,7 +92,8 @@ document.addEventListener("keydown", (event) => {
 })();
 
 /**
- * Cursor-follow locomotion with deadzone + viewport collision.
+ * Anchored cursor-lean motion:
+ * stays pinned to its base location, leans toward cursor, then returns to base.
  */
 (function initHeroDemoCursorFollow() {
   const pos = document.getElementById("hero-demo-pos");
@@ -100,13 +101,12 @@ document.addEventListener("keydown", (event) => {
   const header = document.querySelector(".site-header");
   if (!pos) return;
 
-  const FOLLOW_EASE = 0.0044;
-  const VELOCITY_DAMPING = 0.96;
-  const MAX_SPEED = 5.6;
-  const BOUNCE_DAMPING = 0.45;
+  const LEAN_EASE = 0.09;
+  const MAX_LEAN_PX = 40;
+  const INFLUENCE_RADIUS_PX = 700;
   const pointer = { x: window.innerWidth * 0.5, y: window.innerHeight * 0.5, active: false };
+  const anchor = { x: 0, y: 0 };
   const smooth = { x: 0, y: 0 };
-  const velocity = { x: 0, y: 0 };
 
   function setPointer(clientX, clientY) {
     pointer.x = clientX;
@@ -146,20 +146,18 @@ document.addEventListener("keydown", (event) => {
   );
   window.addEventListener("mouseleave", () => {
     pointer.active = false;
-    velocity.x = 0;
-    velocity.y = 0;
   });
   window.addEventListener("blur", () => {
     pointer.active = false;
-    velocity.x = 0;
-    velocity.y = 0;
   });
 
   const initial = readOffsetsFromTransform();
   if (initial) {
-    smooth.x = initial.x;
-    smooth.y = initial.y;
+    anchor.x = initial.x;
+    anchor.y = initial.y;
   }
+  smooth.x = anchor.x;
+  smooth.y = anchor.y;
 
   function frame() {
     const rect = pos.getBoundingClientRect();
@@ -168,14 +166,8 @@ document.addEventListener("keydown", (event) => {
       (pointer.x < 0 || pointer.x > window.innerWidth || pointer.y < 0 || pointer.y > window.innerHeight)
     ) {
       pointer.active = false;
-      velocity.x = 0;
-      velocity.y = 0;
     }
 
-    const deadLeft = rect.left;
-    const deadRight = rect.right;
-    const deadTop = rect.top;
-    const deadBottom = rect.bottom;
     const pointerOverFooter =
       pointer.active &&
       footer &&
@@ -201,80 +193,27 @@ document.addEventListener("keydown", (event) => {
         );
       })();
 
-    let ax = 0;
-    let ay = 0;
+    let targetX = anchor.x;
+    let targetY = anchor.y;
     if (pointer.active && !pointerOverFooter && !pointerOverHeader) {
-      const outsideDx = Math.max(deadLeft - pointer.x, 0, pointer.x - deadRight);
-      const outsideDy = Math.max(deadTop - pointer.y, 0, pointer.y - deadBottom);
-      const outsideDist = Math.hypot(outsideDx, outsideDy);
-      if (outsideDist > 0) {
-        const cx = rect.left + rect.width * 0.5;
-        const cy = rect.top + rect.height * 0.5;
-        const dx = pointer.x - cx;
-        const dy = pointer.y - cy;
-        const len = Math.hypot(dx, dy) || 1;
-        const pull = outsideDist * FOLLOW_EASE;
-        ax = (dx / len) * pull;
-        ay = (dy / len) * pull;
+      const cx = rect.left + rect.width * 0.5;
+      const cy = rect.top + rect.height * 0.5;
+      const dx = pointer.x - cx;
+      const dy = pointer.y - cy;
+      const dist = Math.hypot(dx, dy);
+      if (dist > 0 && dist < INFLUENCE_RADIUS_PX) {
+        // Stronger lean when cursor is nearer, fading to 0 at influence radius.
+        const influence = 1 - dist / INFLUENCE_RADIUS_PX;
+        const lean = MAX_LEAN_PX * influence;
+        targetX = anchor.x + (dx / dist) * lean;
+        targetY = anchor.y + (dy / dist) * lean;
       }
     }
 
-    velocity.x = (velocity.x + ax) * VELOCITY_DAMPING;
-    velocity.y = (velocity.y + ay) * VELOCITY_DAMPING;
-    const speed = Math.hypot(velocity.x, velocity.y);
-    if (speed > MAX_SPEED) {
-      const scale = MAX_SPEED / speed;
-      velocity.x *= scale;
-      velocity.y *= scale;
-    }
-    smooth.x += velocity.x;
-    smooth.y += velocity.y;
+    smooth.x += (targetX - smooth.x) * LEAN_EASE;
+    smooth.y += (targetY - smooth.y) * LEAN_EASE;
 
     pos.style.transform = `translate(calc(-50% + ${smooth.x.toFixed(2)}px), calc(-50% + ${smooth.y.toFixed(2)}px))`;
-
-    // Collision: keep the component inside the viewport and bounce back.
-    const posRect = pos.getBoundingClientRect();
-    let collided = false;
-    let topLimit = 0;
-    if (header) {
-      const headerRect = header.getBoundingClientRect();
-      if (headerRect.bottom > 0 && headerRect.height > 0) {
-        topLimit = Math.max(topLimit, headerRect.bottom);
-      }
-    }
-
-    if (posRect.left < 0) {
-      smooth.x += -posRect.left;
-      velocity.x = Math.abs(velocity.x) * BOUNCE_DAMPING;
-      collided = true;
-    } else if (posRect.right > window.innerWidth) {
-      smooth.x -= posRect.right - window.innerWidth;
-      velocity.x = -Math.abs(velocity.x) * BOUNCE_DAMPING;
-      collided = true;
-    }
-
-    if (posRect.top < topLimit) {
-      smooth.y += topLimit - posRect.top;
-      velocity.y = Math.abs(velocity.y) * BOUNCE_DAMPING;
-      collided = true;
-    } else {
-      let bottomLimit = window.innerHeight;
-      if (footer) {
-        const footerTop = footer.getBoundingClientRect().top;
-        if (Number.isFinite(footerTop)) {
-          bottomLimit = Math.min(bottomLimit, Math.max(0, footerTop));
-        }
-      }
-      if (posRect.bottom > bottomLimit) {
-        smooth.y -= posRect.bottom - bottomLimit;
-        velocity.y = -Math.abs(velocity.y) * BOUNCE_DAMPING;
-        collided = true;
-      }
-    }
-
-    if (collided) {
-      pos.style.transform = `translate(calc(-50% + ${smooth.x.toFixed(2)}px), calc(-50% + ${smooth.y.toFixed(2)}px))`;
-    }
 
     const revealRect = pos.getBoundingClientRect();
     const revealX = revealRect.left + revealRect.width * 0.5;
