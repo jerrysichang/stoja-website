@@ -97,22 +97,9 @@ document.addEventListener("keydown", (event) => {
  */
 (function initHeroDemoCursorFollow() {
   const pos = document.getElementById("hero-demo-pos");
-  const footer = document.querySelector(".site-footer");
-  const header = document.querySelector(".site-header");
   if (!pos) return;
 
-  const LEAN_EASE = 0.09;
-  const MAX_LEAN_PX = 40;
-  const INFLUENCE_RADIUS_PX = 700;
-  const pointer = { x: window.innerWidth * 0.5, y: window.innerHeight * 0.5, active: false };
   const anchor = { x: 0, y: 0 };
-  const smooth = { x: 0, y: 0 };
-
-  function setPointer(clientX, clientY) {
-    pointer.x = clientX;
-    pointer.y = clientY;
-    pointer.active = true;
-  }
 
   function readOffsetsFromTransform() {
     const t = pos.style.transform || "";
@@ -121,17 +108,43 @@ document.addEventListener("keydown", (event) => {
     return { x: Number(m[1]), y: Number(m[2]) };
   }
 
+  const initial = readOffsetsFromTransform();
+  if (initial) {
+    anchor.x = initial.x;
+    anchor.y = initial.y;
+  }
+
+  function frame() {
+    pos.style.transform = `translate(calc(-50% + ${anchor.x.toFixed(2)}px), calc(-50% + ${anchor.y.toFixed(2)}px))`;
+
+    window.requestAnimationFrame(frame);
+  }
+
+  window.requestAnimationFrame(frame);
+})();
+
+/**
+ * Homepage background mask follows the live cursor position.
+ */
+(function initCursorMaskTracking() {
+  function setMaskPosition(x, y) {
+    document.documentElement.style.setProperty("--cursor-x", `${x}px`);
+    document.documentElement.style.setProperty("--cursor-y", `${y}px`);
+  }
+
+  setMaskPosition(window.innerWidth * 0.5, window.innerHeight * 0.5);
+
   window.addEventListener(
     "pointermove",
     (event) => {
-      setPointer(event.clientX, event.clientY);
+      setMaskPosition(event.clientX, event.clientY);
     },
     { passive: true }
   );
   window.addEventListener(
     "mousemove",
     (event) => {
-      setPointer(event.clientX, event.clientY);
+      setMaskPosition(event.clientX, event.clientY);
     },
     { passive: true }
   );
@@ -140,86 +153,63 @@ document.addEventListener("keydown", (event) => {
     (event) => {
       const touch = event.touches[0];
       if (!touch) return;
-      setPointer(touch.clientX, touch.clientY);
+      setMaskPosition(touch.clientX, touch.clientY);
     },
     { passive: true }
   );
-  window.addEventListener("mouseleave", () => {
-    pointer.active = false;
-  });
-  window.addEventListener("blur", () => {
-    pointer.active = false;
-  });
+})();
 
-  const initial = readOffsetsFromTransform();
-  if (initial) {
-    anchor.x = initial.x;
-    anchor.y = initial.y;
-  }
-  smooth.x = anchor.x;
-  smooth.y = anchor.y;
+/**
+ * Tagline word avoidance: words are pushed away from the floating shell.
+ */
+(function initTaglineWordAvoidance() {
+  const pos = document.getElementById("hero-demo-pos");
+  const words = Array.from(document.querySelectorAll(".tagline-word"));
+  if (!pos || words.length === 0) return;
+
+  const EFFECT_RADIUS_PX = 480;
+  const MAX_PUSH_PX = 160;
+  const EASE = 0.22;
+
+  const state = new WeakMap();
+  words.forEach((word) => state.set(word, { x: 0, y: 0 }));
 
   function frame() {
-    const rect = pos.getBoundingClientRect();
-    if (
-      pointer.active &&
-      (pointer.x < 0 || pointer.x > window.innerWidth || pointer.y < 0 || pointer.y > window.innerHeight)
-    ) {
-      pointer.active = false;
-    }
+    const shellRect = pos.getBoundingClientRect();
+    const shellCx = shellRect.left + shellRect.width * 0.5;
+    const shellCy = shellRect.top + shellRect.height * 0.5;
+    const shellRadius = Math.hypot(shellRect.width, shellRect.height) * 0.5;
+    const influenceRadius = shellRadius + EFFECT_RADIUS_PX;
 
-    const pointerOverFooter =
-      pointer.active &&
-      footer &&
-      (() => {
-        const footerRect = footer.getBoundingClientRect();
-        return (
-          pointer.x >= footerRect.left &&
-          pointer.x <= footerRect.right &&
-          pointer.y >= footerRect.top &&
-          pointer.y <= footerRect.bottom
-        );
-      })();
-    const pointerOverHeader =
-      pointer.active &&
-      header &&
-      (() => {
-        const headerRect = header.getBoundingClientRect();
-        return (
-          pointer.x >= headerRect.left &&
-          pointer.x <= headerRect.right &&
-          pointer.y >= headerRect.top &&
-          pointer.y <= headerRect.bottom
-        );
-      })();
+    for (const word of words) {
+      const rect = word.getBoundingClientRect();
+      const wx = rect.left + rect.width * 0.5;
+      const wy = rect.top + rect.height * 0.5;
 
-    let targetX = anchor.x;
-    let targetY = anchor.y;
-    if (pointer.active && !pointerOverFooter && !pointerOverHeader) {
-      const cx = rect.left + rect.width * 0.5;
-      const cy = rect.top + rect.height * 0.5;
-      const dx = pointer.x - cx;
-      const dy = pointer.y - cy;
-      const dist = Math.hypot(dx, dy);
-      if (dist > 0 && dist < INFLUENCE_RADIUS_PX) {
-        // Stronger lean when cursor is nearer, fading to 0 at influence radius.
-        const influence = 1 - dist / INFLUENCE_RADIUS_PX;
-        const lean = MAX_LEAN_PX * influence;
-        targetX = anchor.x + (dx / dist) * lean;
-        targetY = anchor.y + (dy / dist) * lean;
+      let dx = wx - shellCx;
+      let dy = wy - shellCy;
+      let dist = Math.hypot(dx, dy);
+      if (dist < 0.001) {
+        dx = 1;
+        dy = 0;
+        dist = 1;
       }
+
+      let tx = 0;
+      let ty = 0;
+      if (dist < influenceRadius) {
+        const outsideFromEdge = Math.max(0, dist - shellRadius);
+        const t = 1 - outsideFromEdge / EFFECT_RADIUS_PX;
+        const push = MAX_PUSH_PX * t * t;
+        tx = (dx / dist) * push;
+        ty = (dy / dist) * push;
+      }
+
+      const s = state.get(word);
+      s.x += (tx - s.x) * EASE;
+      s.y += (ty - s.y) * EASE;
+      word.style.transform = `translate3d(${s.x.toFixed(2)}px, ${s.y.toFixed(2)}px, 0)`;
     }
-
-    smooth.x += (targetX - smooth.x) * LEAN_EASE;
-    smooth.y += (targetY - smooth.y) * LEAN_EASE;
-
-    pos.style.transform = `translate(calc(-50% + ${smooth.x.toFixed(2)}px), calc(-50% + ${smooth.y.toFixed(2)}px))`;
-
-    const revealRect = pos.getBoundingClientRect();
-    const revealX = revealRect.left + revealRect.width * 0.5;
-    const revealY = revealRect.top + revealRect.height * 0.5;
-    document.documentElement.style.setProperty("--cursor-x", `${revealX}px`);
-    document.documentElement.style.setProperty("--cursor-y", `${revealY}px`);
 
     window.requestAnimationFrame(frame);
   }

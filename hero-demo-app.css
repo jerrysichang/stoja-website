@@ -6,7 +6,7 @@
 .hero-demo-stage {
   position: fixed;
   left: 50%;
-  top: 46%;
+  top: 66%;
   transform: translate(-50%, -50%);
   width: min(280px, calc(100vw - 2.5rem));
   min-height: min(380px, 52vh);
