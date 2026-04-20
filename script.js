@@ -92,20 +92,35 @@ document.addEventListener("keydown", (event) => {
 })();
 
 /**
- * When the bottom Download CTA scrolls in, dock the shell into hero flow
- * (i.e. stop fixed positioning) and center it in the hero area.
+ * Constant parallax shift for the floating shell, mapped to total page scroll:
+ * starts at zero and reaches full rest offset exactly at scroll end.
  */
 (function initHeroDemoDocking() {
   const stage = document.querySelector(".hero-demo-stage");
+  const cta = document.querySelector(".hero-download");
   if (!stage) return;
 
-  const PARALLAX_RATE = 0.22;
-  const MAX_UP_SHIFT_VH = 18;
+  const START_TOP_RATIO = 0.66;
+  const END_TOP_RATIO = 0.42;
+  const CTA_CLEARANCE_PX = 18;
 
   function updateDockState() {
-    const maxUpShiftPx = window.innerHeight * (MAX_UP_SHIFT_VH / 100);
-    const rawPushY = -window.scrollY * PARALLAX_RATE;
-    const pushY = Math.max(rawPushY, -maxUpShiftPx);
+    const viewportH = window.innerHeight;
+    const targetUpShiftPx = viewportH * (START_TOP_RATIO - END_TOP_RATIO);
+    const maxScrollY = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    const scrollProgress = Math.min(1, Math.max(0, window.scrollY / maxScrollY));
+    let pushY = -targetUpShiftPx * scrollProgress;
+
+    // Safety clamp: ensure the shell never overlaps the CTA.
+    if (cta) {
+      const stageRect = stage.getBoundingClientRect();
+      const ctaRect = cta.getBoundingClientRect();
+      const baselineCenterY = viewportH * START_TOP_RATIO;
+      const maxAllowedPushY =
+        ctaRect.top - CTA_CLEARANCE_PX - baselineCenterY - stageRect.height * 0.5;
+      pushY = Math.min(pushY, maxAllowedPushY);
+    }
+
     stage.style.setProperty("--hero-stage-push", `${pushY.toFixed(2)}px`);
   }
 
@@ -147,39 +162,27 @@ document.addEventListener("keydown", (event) => {
 })();
 
 /**
- * Homepage background mask follows the live cursor position.
+ * Homepage background mask follows the floating shell position.
  */
 (function initCursorMaskTracking() {
+  const stage = document.querySelector(".hero-demo-stage");
+
   function setMaskPosition(x, y) {
     document.documentElement.style.setProperty("--cursor-x", `${x}px`);
     document.documentElement.style.setProperty("--cursor-y", `${y}px`);
   }
 
-  setMaskPosition(window.innerWidth * 0.5, window.innerHeight * 0.5);
+  function frame() {
+    if (stage) {
+      const rect = stage.getBoundingClientRect();
+      setMaskPosition(rect.left + rect.width * 0.5, rect.top + rect.height * 0.5);
+    } else {
+      setMaskPosition(window.innerWidth * 0.5, window.innerHeight * 0.5);
+    }
+    window.requestAnimationFrame(frame);
+  }
 
-  window.addEventListener(
-    "pointermove",
-    (event) => {
-      setMaskPosition(event.clientX, event.clientY);
-    },
-    { passive: true }
-  );
-  window.addEventListener(
-    "mousemove",
-    (event) => {
-      setMaskPosition(event.clientX, event.clientY);
-    },
-    { passive: true }
-  );
-  window.addEventListener(
-    "touchmove",
-    (event) => {
-      const touch = event.touches[0];
-      if (!touch) return;
-      setMaskPosition(touch.clientX, touch.clientY);
-    },
-    { passive: true }
-  );
+  window.requestAnimationFrame(frame);
 })();
 
 /**
@@ -190,9 +193,10 @@ document.addEventListener("keydown", (event) => {
   const words = Array.from(document.querySelectorAll(".tagline-word"));
   if (!pos || words.length === 0) return;
 
-  const EFFECT_RADIUS_PX = 480;
-  const MAX_PUSH_PX = 160;
-  const EASE = 0.22;
+  const EFFECT_RADIUS_PX = 460;
+  const MAX_PUSH_PX = 118;
+  const EASE = 0.18;
+  const NARROW_BREAKPOINT_PX = 860;
 
   const state = new WeakMap();
   words.forEach((word) => state.set(word, { x: 0, y: 0 }));
@@ -224,8 +228,19 @@ document.addEventListener("keydown", (event) => {
         const outsideFromEdge = Math.max(0, dist - shellRadius);
         const t = 1 - outsideFromEdge / EFFECT_RADIUS_PX;
         const push = MAX_PUSH_PX * t * t;
-        tx = (dx / dist) * push;
-        ty = (dy / dist) * push;
+        const radialX = (dx / dist) * push;
+        const radialY = (dy / dist) * push;
+        const isNarrow = window.innerWidth <= NARROW_BREAKPOINT_PX;
+
+        if (isNarrow) {
+          tx = 0;
+          ty = radialY;
+        } else {
+          const flowDir = word.dataset.flow === "left" ? -1 : 1;
+          const lateralBias = flowDir * push * 0.72;
+          tx = radialX + lateralBias;
+          ty = radialY * 0.55;
+        }
       }
 
       const s = state.get(word);

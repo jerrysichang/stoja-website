@@ -317,8 +317,8 @@ img {
 }
 
 .hero-download {
-  margin-top: 14.625rem;
-  margin-bottom: 3.25rem;
+  margin-top: 16.5rem;
+  margin-bottom: 1.75rem;
   padding-inline: 1.55rem;
   padding-block: 0.72rem;
   font-size: 1rem;
@@ -388,12 +388,12 @@ img {
   gap: 0.45rem 0.85rem;
   justify-content: flex-end;
   align-items: center;
-  font-size: 0.5rem;
+  font-size: 0.44rem;
   line-height: 1.35;
 }
 
 .legal-links .muted {
-  font-size: 0.44rem;
+  font-size: inherit;
 }
 
 .page-main {
@@ -579,6 +579,50 @@ img {
 }
 
 @media (max-width: 860px) {
+  .hero-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .display {
+    order: 1;
+    margin-bottom: 4.5rem;
+  }
+
+  .tagline {
+    order: 2;
+    margin: 0 auto 4.5rem;
+  }
+
+  .hero-demo-stage {
+    order: 3;
+    position: relative;
+    left: auto;
+    top: auto;
+    transform: none !important;
+    margin: 0 0 2rem;
+    min-height: auto;
+  }
+
+  .hero-demo-pos {
+    position: relative;
+    left: auto;
+    top: auto;
+    transform: none !important;
+    width: min(280px, calc(100vw - 2rem));
+  }
+
+  .hero-download {
+    order: 4;
+    margin-top: 0;
+    margin-bottom: 1.25rem;
+  }
+
+  .tagline-word {
+    transform: none !important;
+  }
+
   .grid-3 {
     grid-template-columns: 1fr;
   }

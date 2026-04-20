@@ -437,9 +437,27 @@
   flex-shrink: 0;
 }
 
+@media (max-width: 860px) {
+  .hero-demo-stage {
+    position: relative;
+    left: auto;
+    top: auto;
+    transform: none !important;
+    min-height: auto;
+    margin-bottom: 2rem;
+  }
+
+  .hero-demo-pos {
+    position: relative;
+    left: auto;
+    top: auto;
+    transform: none !important;
+  }
+}
+
 @media (max-width: 480px) {
   .hero-demo-stage {
-    min-height: min(360px, 48vh);
+    min-height: auto;
     margin-bottom: 1.25rem;
   }
 }
