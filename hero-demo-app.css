@@ -7,7 +7,7 @@
   position: fixed;
   left: 50%;
   top: 66%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) translateY(var(--hero-stage-push, 0px));
   width: min(280px, calc(100vw - 2.5rem));
   min-height: min(380px, 52vh);
   margin: 0;

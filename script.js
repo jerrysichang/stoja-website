@@ -92,6 +92,34 @@ document.addEventListener("keydown", (event) => {
 })();
 
 /**
+ * When the bottom Download CTA scrolls in, dock the shell into hero flow
+ * (i.e. stop fixed positioning) and center it in the hero area.
+ */
+(function initHeroDemoDocking() {
+  const stage = document.querySelector(".hero-demo-stage");
+  const cta = document.querySelector(".hero-download");
+  if (!stage || !cta) return;
+
+  const BASELINE_TOP_RATIO = 0.66;
+  const CTA_GAP_PX = 52;
+
+  function updateDockState() {
+    const ctaRect = cta.getBoundingClientRect();
+    const stageRect = stage.getBoundingClientRect();
+    const baselineCenterY = window.innerHeight * BASELINE_TOP_RATIO;
+    const maxCenterY = ctaRect.top - CTA_GAP_PX - stageRect.height * 0.5;
+    const desiredCenterY = Math.min(baselineCenterY, maxCenterY);
+    const pushY = desiredCenterY - baselineCenterY;
+
+    stage.style.setProperty("--hero-stage-push", `${Math.min(0, pushY).toFixed(2)}px`);
+  }
+
+  window.addEventListener("scroll", updateDockState, { passive: true });
+  window.addEventListener("resize", updateDockState);
+  updateDockState();
+})();
+
+/**
  * Anchored cursor-lean motion:
  * stays pinned to its base location, leans toward cursor, then returns to base.
  */
