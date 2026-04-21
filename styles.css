@@ -312,28 +312,8 @@ img {
 }
 
 .tagline-word {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 0.015em;
-  max-width: 100%;
+  display: inline-block;
   will-change: transform;
-}
-
-.tagline-word[data-flow="left"] {
-  justify-content: flex-start;
-}
-
-.tagline-word[data-flow="right"] {
-  justify-content: flex-end;
-}
-
-.tagline-word-text {
-  display: inline-block;
-}
-
-.tagline-punct {
-  display: inline-block;
-  transform: translateX(-0.085em);
 }
 
 .hero-download {
@@ -399,6 +379,8 @@ img {
   flex-wrap: wrap;
   align-items: center;
   font-size: 0.91rem;
+  flex: 1 1 260px;
+  min-width: min(100%, 260px);
 }
 
 .legal-links {
@@ -410,6 +392,8 @@ img {
   align-items: center;
   font-size: 0.72rem;
   line-height: 1.35;
+  flex: 1 1 220px;
+  min-width: min(100%, 220px);
 }
 
 .legal-links .muted {
@@ -667,13 +651,21 @@ img {
   }
 
   .site-footer .container {
-    flex-direction: row;
-    align-items: center;
-    gap: 0.65rem 1rem;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.85rem;
+  }
+
+  .footer-leading {
+    flex: 1 1 auto;
+    min-width: 0;
+    justify-content: flex-start;
   }
 
   .legal-links {
-    margin-left: auto;
-    justify-content: flex-end;
+    margin-left: 0;
+    justify-content: flex-start;
+    flex: 1 1 auto;
+    min-width: 0;
   }
 }
