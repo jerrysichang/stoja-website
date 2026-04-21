@@ -312,8 +312,28 @@ img {
 }
 
 .tagline-word {
-  display: inline-block;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.015em;
+  max-width: 100%;
   will-change: transform;
+}
+
+.tagline-word[data-flow="left"] {
+  justify-content: flex-start;
+}
+
+.tagline-word[data-flow="right"] {
+  justify-content: flex-end;
+}
+
+.tagline-word-text {
+  display: inline-block;
+}
+
+.tagline-punct {
+  display: inline-block;
+  transform: translateX(-0.085em);
 }
 
 .hero-download {
