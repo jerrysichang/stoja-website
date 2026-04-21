@@ -195,6 +195,8 @@ document.addEventListener("keydown", (event) => {
 
   const EFFECT_RADIUS_PX = 460;
   const MAX_PUSH_PX = 118;
+  const WIDE_MAX_PUSH_MULT = 1.45;
+  const WIDE_LATERAL_K = 0.95;
   const EASE = 0.18;
   const NARROW_BREAKPOINT_PX = 860;
 
@@ -227,7 +229,9 @@ document.addEventListener("keydown", (event) => {
       if (dist < influenceRadius) {
         const outsideFromEdge = Math.max(0, dist - shellRadius);
         const t = 1 - outsideFromEdge / EFFECT_RADIUS_PX;
-        const push = MAX_PUSH_PX * t * t;
+        const isWide = word.dataset.wide === "true";
+        const pushMax = MAX_PUSH_PX * (isWide ? WIDE_MAX_PUSH_MULT : 1);
+        const push = pushMax * t * t;
         const radialX = (dx / dist) * push;
         const radialY = (dy / dist) * push;
         const isNarrow = window.innerWidth <= NARROW_BREAKPOINT_PX;
@@ -237,7 +241,8 @@ document.addEventListener("keydown", (event) => {
           ty = radialY;
         } else {
           const flowDir = word.dataset.flow === "left" ? -1 : 1;
-          const lateralBias = flowDir * push * 0.72;
+          const lateralK = isWide ? WIDE_LATERAL_K : 0.72;
+          const lateralBias = flowDir * push * lateralK;
           tx = radialX + lateralBias;
           ty = radialY * 0.55;
         }
