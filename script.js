@@ -101,7 +101,7 @@ document.addEventListener("keydown", (event) => {
   if (!stage) return;
 
   const START_TOP_RATIO = 0.66;
-  const END_TOP_RATIO = 0.42;
+  const END_TOP_RATIO = 0.48;
   const CTA_CLEARANCE_PX = 18;
 
   function updateDockState() {

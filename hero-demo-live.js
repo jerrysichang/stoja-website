@@ -6,7 +6,7 @@
   const shell = document.querySelector(".hero-demo-shell");
   if (!shell) return;
 
-  const INITIAL_SEC = 2 * 60 + 10;
+  const INITIAL_SEC = 2 * 60 + 35;
 
   const CONFIG = {
     hopefulMinTimeSeconds: 420,
@@ -30,10 +30,12 @@
   let lowTimeEmotion = "desperate";
   let tickId = null;
   let lowRotateTimeoutId = null;
+  let modalTriggeredThisCycle = false;
 
   const clockEl = shell.querySelector(".hero-demo-clock");
   const faceImg = shell.querySelector(".hero-demo-creature-mouth");
   const facePill = shell.querySelector(".hero-demo-creature-pill");
+  const openDownloadButton = document.querySelector("[data-open-download]");
 
   function clamp(n, lo, hi) {
     return Math.min(hi, Math.max(lo, n));
@@ -140,6 +142,7 @@
       stopLowRotate();
       remaining = INITIAL_SEC;
       lowTimeEmotion = "desperate";
+      modalTriggeredThisCycle = false;
     } else {
       remaining -= 1;
       if (remaining === 0) stopLowRotate();
@@ -153,6 +156,16 @@
     if (remaining > PANIC_START_SECONDS) {
       lowTimeEmotion = "desperate";
     }
+
+    if (remaining === 1 && !modalTriggeredThisCycle) {
+      modalTriggeredThisCycle = true;
+      const modal = document.getElementById("download-modal");
+      const isAlreadyOpen = modal?.classList.contains("is-open");
+      if (!isAlreadyOpen) {
+        openDownloadButton?.click();
+      }
+    }
+
     maybeStartLowRotate();
   }
 
