@@ -316,6 +316,23 @@ img {
   will-change: transform;
 }
 
+.tagline-word[data-hang="end"] {
+  position: relative;
+  overflow: visible;
+}
+
+.tagline-word-core {
+  display: inline-block;
+}
+
+.tagline-punct {
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translateX(100%);
+  line-height: inherit;
+}
+
 .hero-download {
   margin-top: 16.5rem;
   margin-bottom: 1.75rem;

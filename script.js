@@ -197,18 +197,11 @@ document.addEventListener("keydown", (event) => {
   const MAX_PUSH_PX = 118;
   const WIDE_MAX_PUSH_MULT = 1.45;
   const WIDE_LATERAL_K = 0.95;
-  const HANG_NUDGE_EM = 0.1;
   const EASE = 0.18;
   const NARROW_BREAKPOINT_PX = 860;
 
   const state = new WeakMap();
   words.forEach((word) => state.set(word, { x: 0, y: 0 }));
-
-  function getHangNudgeXPx(word) {
-    if (word.dataset.hang !== "end" || word.dataset.flow !== "right") return 0;
-    const fontSize = parseFloat(window.getComputedStyle(word).fontSize) || 16;
-    return -HANG_NUDGE_EM * fontSize;
-  }
 
   function frame() {
     const shellRect = pos.getBoundingClientRect();
@@ -258,9 +251,7 @@ document.addEventListener("keydown", (event) => {
       const s = state.get(word);
       s.x += (tx - s.x) * EASE;
       s.y += (ty - s.y) * EASE;
-      const nudgeX = getHangNudgeXPx(word);
-      const finalX = s.x + nudgeX;
-      word.style.transform = `translate3d(${finalX.toFixed(2)}px, ${s.y.toFixed(2)}px, 0)`;
+      word.style.transform = `translate3d(${s.x.toFixed(2)}px, ${s.y.toFixed(2)}px, 0)`;
     }
 
     window.requestAnimationFrame(frame);
