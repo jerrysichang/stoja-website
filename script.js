@@ -104,34 +104,25 @@ document.addEventListener("keydown", (event) => {
   const END_TOP_RATIO = 0.54;
   const CTA_CLEARANCE_PX = 10;
 
-  function measureStageHalfHeightPx() {
-    const prev = stage.style.getPropertyValue("--hero-stage-push");
-    stage.style.setProperty("--hero-stage-push", "0px");
-    const h = stage.getBoundingClientRect().height;
-    stage.style.setProperty("--hero-stage-push", prev);
-    return h * 0.5;
-  }
-
   function updateDockState() {
     const viewportH = window.innerHeight;
     const maxScrollY = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
     const scrollProgress = Math.min(1, Math.max(0, window.scrollY / maxScrollY));
 
     const baselineCenterY = viewportH * START_TOP_RATIO;
-    const stageHalfH = measureStageHalfHeightPx();
+    const stageHalfH = stage.offsetHeight * 0.5;
 
-    let desiredEndPushY = -viewportH * (START_TOP_RATIO - END_TOP_RATIO);
+    const aestheticEndPushY = -viewportH * (START_TOP_RATIO - END_TOP_RATIO);
 
+    let endPushY = aestheticEndPushY;
     if (cta) {
-      const ctaRect = cta.getBoundingClientRect();
-      const pushForClearance =
-        ctaRect.top - CTA_CLEARANCE_PX - baselineCenterY - stageHalfH - desiredEndPushY;
-      if (pushForClearance < 0) {
-        desiredEndPushY += pushForClearance;
-      }
+      const ctaTopAtRest = cta.offsetTop;
+      const targetCenterY = ctaTopAtRest - CTA_CLEARANCE_PX - stageHalfH;
+      const clearanceEndPushY = targetCenterY - baselineCenterY;
+      endPushY = Math.min(aestheticEndPushY, clearanceEndPushY);
     }
 
-    const pushY = desiredEndPushY * scrollProgress;
+    const pushY = endPushY * scrollProgress;
 
     stage.style.setProperty("--hero-stage-push", `${pushY.toFixed(2)}px`);
   }
