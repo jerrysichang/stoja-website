@@ -103,7 +103,7 @@ document.addEventListener("keydown", (event) => {
   const START_TOP_RATIO = 0.66;
   const END_TOP_RATIO = 0.42;
   const NARROW_BREAKPOINT_PX = 860;
-  const END_TOP_RATIO_NARROW = 0.36;
+  const END_TOP_RATIO_NARROW = 0.3;
 
   function updateDockState() {
     const viewportH = window.innerHeight;
