@@ -102,13 +102,17 @@ document.addEventListener("keydown", (event) => {
 
   const START_TOP_RATIO = 0.66;
   const END_TOP_RATIO = 0.42;
+  const NARROW_BREAKPOINT_PX = 860;
+  const END_TOP_RATIO_NARROW = 0.36;
 
   function updateDockState() {
     const viewportH = window.innerHeight;
     const maxScrollY = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
     const scrollProgress = Math.min(1, Math.max(0, window.scrollY / maxScrollY));
 
-    const endPushY = -viewportH * (START_TOP_RATIO - END_TOP_RATIO);
+    const endTopRatio =
+      window.innerWidth <= NARROW_BREAKPOINT_PX ? END_TOP_RATIO_NARROW : END_TOP_RATIO;
+    const endPushY = -viewportH * (START_TOP_RATIO - endTopRatio);
 
     const pushY = endPushY * scrollProgress;
 
