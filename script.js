@@ -102,25 +102,13 @@ document.addEventListener("keydown", (event) => {
 
   const START_TOP_RATIO = 0.66;
   const END_TOP_RATIO = 0.54;
-  const CTA_CLEARANCE_PX = 10;
 
   function updateDockState() {
     const viewportH = window.innerHeight;
     const maxScrollY = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
     const scrollProgress = Math.min(1, Math.max(0, window.scrollY / maxScrollY));
 
-    const baselineCenterY = viewportH * START_TOP_RATIO;
-    const stageHalfH = stage.offsetHeight * 0.5;
-
-    const aestheticEndPushY = -viewportH * (START_TOP_RATIO - END_TOP_RATIO);
-
-    let endPushY = aestheticEndPushY;
-    if (cta) {
-      const ctaTopAtRest = cta.offsetTop;
-      const targetCenterY = ctaTopAtRest - CTA_CLEARANCE_PX - stageHalfH;
-      const clearanceEndPushY = targetCenterY - baselineCenterY;
-      endPushY = Math.min(aestheticEndPushY, clearanceEndPushY);
-    }
+    const endPushY = -viewportH * (START_TOP_RATIO - END_TOP_RATIO);
 
     const pushY = endPushY * scrollProgress;
 
