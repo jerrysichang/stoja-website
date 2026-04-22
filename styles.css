@@ -311,6 +311,10 @@ img {
   color: var(--color-accent);
 }
 
+.tagline-narrow-only {
+  display: none;
+}
+
 .tagline-word {
   display: inline-block;
   will-change: transform;
@@ -622,6 +626,10 @@ img {
   .tagline {
     order: 2;
     margin: 0 auto 3.25rem;
+  }
+
+  .tagline-narrow-only {
+    display: block;
   }
 
   .hero-demo-stage {

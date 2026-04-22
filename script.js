@@ -97,21 +97,32 @@ document.addEventListener("keydown", (event) => {
  */
 (function initHeroDemoDocking() {
   const stage = document.querySelector(".hero-demo-stage");
-  const cta = document.querySelector(".hero-download");
   if (!stage) return;
 
   const START_TOP_RATIO = 0.66;
-  const END_TOP_RATIO = 0.42;
   const NARROW_BREAKPOINT_PX = 860;
+  const MEDIUM_BREAKPOINT_PX = 1200;
   const END_TOP_RATIO_NARROW = 0.3;
+  const END_TOP_RATIO_MEDIUM = 0.34;
+  const END_TOP_RATIO_WIDE = 0.3;
+
+  function getEndTopRatio() {
+    const w = window.innerWidth;
+    if (w <= NARROW_BREAKPOINT_PX) return END_TOP_RATIO_NARROW;
+    if (w <= MEDIUM_BREAKPOINT_PX) return END_TOP_RATIO_MEDIUM;
+    return END_TOP_RATIO_WIDE;
+  }
+
+  function getScrollProgress() {
+    const maxPageScrollY = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    return Math.min(1, Math.max(0, window.scrollY / maxPageScrollY));
+  }
 
   function updateDockState() {
     const viewportH = window.innerHeight;
-    const maxScrollY = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-    const scrollProgress = Math.min(1, Math.max(0, window.scrollY / maxScrollY));
+    const scrollProgress = getScrollProgress();
 
-    const endTopRatio =
-      window.innerWidth <= NARROW_BREAKPOINT_PX ? END_TOP_RATIO_NARROW : END_TOP_RATIO;
+    const endTopRatio = getEndTopRatio();
     const endPushY = -viewportH * (START_TOP_RATIO - endTopRatio);
 
     const pushY = endPushY * scrollProgress;
