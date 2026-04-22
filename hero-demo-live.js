@@ -6,8 +6,6 @@
   const shell = document.querySelector(".hero-demo-shell");
   if (!shell) return;
 
-  const INITIAL_SEC = 2 * 60 + 35;
-
   const CONFIG = {
     hopefulMinTimeSeconds: 420,
     attentiveMinTimeSeconds: 240,
@@ -20,6 +18,8 @@
   const WARNING_THRESHOLD_SECONDS = 7 * 60;
   const CRITICAL_THRESHOLD_SECONDS = 4 * 60;
   const RED_THRESHOLD_SECONDS = CRITICAL_THRESHOLD_SECONDS + 10;
+  /** Countdown begins this many seconds before red digit styling (`remaining <= RED_THRESHOLD_SECONDS`). */
+  const INITIAL_SEC = RED_THRESHOLD_SECONDS + 5;
   const ANGRY_HIDE_UNDER_SECONDS = 60;
   const DYING_RANDOM_SHOW_UNDER_SECONDS = 90;
   const LOW_TIME_TOGGLE_MIN_MS = 2800;
