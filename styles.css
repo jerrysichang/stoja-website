@@ -311,8 +311,26 @@ img {
   color: var(--color-accent);
 }
 
+@media (min-width: 861px) {
+  /* Fixed hero shell sits mid-viewport; extra top margin keeps copy clear on first paint. */
+  .tagline {
+    margin-top: clamp(3rem, 11vh, 7rem);
+    margin-bottom: clamp(13.5rem, 14vh, 19rem);
+  }
+}
+
 .tagline-narrow-only {
   display: none;
+}
+
+.tagline-medium-wide-only {
+  display: none;
+}
+
+@media (min-width: 861px) {
+  .tagline-medium-wide-only {
+    display: block;
+  }
 }
 
 .tagline-word {
@@ -345,6 +363,12 @@ img {
   font-size: 1rem;
   position: relative;
   z-index: 40;
+}
+
+@media (min-width: 861px) {
+  .hero-download {
+    margin-top: clamp(19.25rem, 21vh, 27.25rem);
+  }
 }
 
 .section {

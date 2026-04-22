@@ -103,8 +103,10 @@ document.addEventListener("keydown", (event) => {
   const NARROW_BREAKPOINT_PX = 860;
   const MEDIUM_BREAKPOINT_PX = 1200;
   const END_TOP_RATIO_NARROW = 0.3;
-  const END_TOP_RATIO_MEDIUM = 0.34;
-  const END_TOP_RATIO_WIDE = 0.3;
+  /** Higher = shell rests lower at scroll end (see endPushY vs START_TOP_RATIO). */
+  /** Medium only: lower ratio = finishes higher on the viewport vs wide. */
+  const END_TOP_RATIO_MEDIUM = 0.46;
+  const END_TOP_RATIO_WIDE = 0.54;
 
   function getEndTopRatio() {
     const w = window.innerWidth;
@@ -213,7 +215,8 @@ document.addEventListener("keydown", (event) => {
     const raw = word.dataset.lateral;
     if (raw == null || raw === "") return 1;
     const n = Number(raw);
-    if (!Number.isFinite(n) || n <= 0) return 1;
+    if (!Number.isFinite(n)) return 1;
+    if (n <= 0) return 0;
     return n;
   }
 
