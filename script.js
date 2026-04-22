@@ -203,6 +203,14 @@ document.addEventListener("keydown", (event) => {
   const state = new WeakMap();
   words.forEach((word) => state.set(word, { x: 0, y: 0 }));
 
+  function getLateralScale(word) {
+    const raw = word.dataset.lateral;
+    if (raw == null || raw === "") return 1;
+    const n = Number(raw);
+    if (!Number.isFinite(n) || n <= 0) return 1;
+    return n;
+  }
+
   function frame() {
     const shellRect = pos.getBoundingClientRect();
     const shellCx = shellRect.left + shellRect.width * 0.5;
@@ -241,8 +249,9 @@ document.addEventListener("keydown", (event) => {
           ty = radialY;
         } else {
           const flowDir = word.dataset.flow === "left" ? -1 : 1;
-          const lateralK = isWide ? WIDE_LATERAL_K : 0.72;
-          const lateralBias = flowDir * push * lateralK;
+          const lateralScale = getLateralScale(word);
+          const lateralKBase = isWide ? WIDE_LATERAL_K : 0.72;
+          const lateralBias = flowDir * push * lateralKBase * lateralScale;
           tx = radialX + lateralBias;
           ty = radialY * 0.55;
         }
