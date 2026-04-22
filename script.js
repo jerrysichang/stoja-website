@@ -104,22 +104,34 @@ document.addEventListener("keydown", (event) => {
   const END_TOP_RATIO = 0.54;
   const CTA_CLEARANCE_PX = 10;
 
+  function measureStageHalfHeightPx() {
+    const prev = stage.style.getPropertyValue("--hero-stage-push");
+    stage.style.setProperty("--hero-stage-push", "0px");
+    const h = stage.getBoundingClientRect().height;
+    stage.style.setProperty("--hero-stage-push", prev);
+    return h * 0.5;
+  }
+
   function updateDockState() {
     const viewportH = window.innerHeight;
-    const targetUpShiftPx = viewportH * (START_TOP_RATIO - END_TOP_RATIO);
     const maxScrollY = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
     const scrollProgress = Math.min(1, Math.max(0, window.scrollY / maxScrollY));
-    let pushY = -targetUpShiftPx * scrollProgress;
 
-    // Safety clamp: ensure the shell never overlaps the CTA.
+    const baselineCenterY = viewportH * START_TOP_RATIO;
+    const stageHalfH = measureStageHalfHeightPx();
+
+    let desiredEndPushY = -viewportH * (START_TOP_RATIO - END_TOP_RATIO);
+
     if (cta) {
-      const stageRect = stage.getBoundingClientRect();
       const ctaRect = cta.getBoundingClientRect();
-      const baselineCenterY = viewportH * START_TOP_RATIO;
-      const maxAllowedPushY =
-        ctaRect.top - CTA_CLEARANCE_PX - baselineCenterY - stageRect.height * 0.5;
-      pushY = Math.min(pushY, maxAllowedPushY);
+      const pushForClearance =
+        ctaRect.top - CTA_CLEARANCE_PX - baselineCenterY - stageHalfH - desiredEndPushY;
+      if (pushForClearance < 0) {
+        desiredEndPushY += pushForClearance;
+      }
     }
+
+    const pushY = desiredEndPushY * scrollProgress;
 
     stage.style.setProperty("--hero-stage-push", `${pushY.toFixed(2)}px`);
   }

@@ -629,7 +629,6 @@ img {
     position: relative;
     left: auto;
     top: auto;
-    transform: none !important;
     padding-top: 3.25rem;
     margin: 0 0 1.25rem;
     min-height: auto;
@@ -639,7 +638,6 @@ img {
     position: relative;
     left: auto;
     top: auto;
-    transform: none !important;
     width: min(280px, calc(100vw - 2rem));
   }
 
