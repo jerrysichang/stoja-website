@@ -477,6 +477,11 @@ img {
   max-width: min(680px, 100%);
 }
 
+.panel.support-panel {
+  background: var(--color-bg);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+}
+
 .support-form {
   display: grid;
   gap: 0.85rem;
