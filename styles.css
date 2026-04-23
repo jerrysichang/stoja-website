@@ -37,6 +37,7 @@
 html {
   height: 100%;
   scrollbar-gutter: stable;
+  background-color: var(--color-bg);
 }
 
 html,
@@ -52,6 +53,8 @@ body {
   line-height: 1.45;
   min-height: 100%;
   min-height: 100dvh;
+  min-height: -webkit-fill-available;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
   display: flex;
   flex-direction: column;
   position: relative;
@@ -198,6 +201,15 @@ img {
   margin: 0;
   font: inherit;
   cursor: pointer;
+}
+
+.footer-leading .link-muted,
+.footer-leading .footer-text-btn {
+  font-size: 0.86rem;
+  line-height: 1.25;
+  letter-spacing: 0.005em;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 .button {
@@ -459,6 +471,46 @@ img {
 
 .content-stack {
   max-width: 760px;
+}
+
+.support-panel {
+  max-width: min(680px, 100%);
+}
+
+.support-form {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.support-label {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.support-input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 0.75rem 0.9rem;
+  color: var(--color-text);
+  font: inherit;
+}
+
+.support-input:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.support-textarea {
+  resize: vertical;
+  min-height: 140px;
+}
+
+.support-send {
+  justify-self: start;
+  margin-top: 0.25rem;
 }
 
 .content-stack > * + * {
