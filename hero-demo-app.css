@@ -50,7 +50,8 @@
 
   width: 100%;
   box-sizing: border-box;
-  padding: 4px 12px 12px;
+  position: relative;
+  padding: 30px 12px 12px;
   border-radius: 12px;
   background: var(--demo-bg-opaque);
   border: 1px solid rgba(42, 235, 185, 0.46);
@@ -69,9 +70,16 @@
 .hero-demo-top-row {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding-top: 4px;
-  margin-bottom: 6px;
+  gap: 10px;
+  padding-top: 2px;
+  margin-bottom: 4px;
+}
+
+.hero-demo-expand-wrap {
+  position: absolute;
+  top: 3px;
+  right: 12px;
+  z-index: 5;
 }
 
 /* PrimaryButton — expand/collapse chevron (AppShell PrimaryButton + collapsed sizing) */
@@ -81,12 +89,12 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 45px;
-  min-height: 30px;
+  min-width: 51px;
+  min-height: 34px;
   padding: 8px;
   margin: 0;
   border-radius: 10px;
-  border: 1px solid var(--demo-border-subtle);
+  border: 2px solid transparent;
   background: var(--demo-bg-elevated);
   color: var(--demo-accent);
   font-family: inherit;
@@ -113,6 +121,7 @@
   align-items: center;
   justify-content: flex-start;
   padding: 4px 2px;
+  padding-right: 63px;
   margin: -4px 0;
   cursor: default;
   touch-action: auto;
@@ -126,7 +135,7 @@
 /* TimerDisplay compact — mono, timer + 1 px */
 .hero-demo-clock {
   font-family: "DM Mono", ui-monospace, monospace;
-  font-size: 26px;
+  font-size: 25px;
   font-weight: 500;
   letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
@@ -157,8 +166,8 @@
 
 .hero-demo-creature-pill {
   position: relative;
-  width: 60px;
-  height: 30px;
+  width: 64px;
+  height: 32px;
   flex-shrink: 0;
   box-sizing: border-box;
   border-radius: 10px;
@@ -210,14 +219,18 @@
 
 /* Toolbar — GhostButton row */
 .hero-demo-toolbar {
+  position: absolute;
+  top: 3px;
+  left: 90px;
+  right: 12px;
+  z-index: 4;
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
-  gap: 0;
-  margin: -3px -12px 7px;
-  padding-inline: 10px;
-  padding-bottom: 7px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.13);
+  justify-content: flex-end;
+  gap: 1px;
+  margin: 0;
+  padding: 0;
   overflow-x: auto;
   scrollbar-width: none;
 }
@@ -245,14 +258,15 @@
   flex-shrink: 0;
   box-sizing: border-box;
   margin: 0;
-  padding: 8px 12px;
+  padding: 0 5px;
   border: 1px solid transparent !important;
   background: transparent;
   color: var(--demo-accent);
   font-family: "Inter", system-ui, -apple-system, sans-serif;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
   line-height: 1;
+  height: 24px;
   cursor: pointer;
   white-space: nowrap;
 }
@@ -268,11 +282,17 @@
 }
 
 .demo-ui-ghost--icon {
-  padding: 8px !important;
+  width: 24px;
+  height: 24px;
+  padding: 0 !important;
   display: inline-flex !important;
   align-items: center;
   justify-content: center;
   line-height: 0;
+}
+
+.hero-demo-toolbar .demo-ui-ghost {
+  letter-spacing: -0.1px;
 }
 
 .hero-demo-edge-btn {

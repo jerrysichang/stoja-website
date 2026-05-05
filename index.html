@@ -43,7 +43,7 @@
             <div class="hero-demo-pos" id="hero-demo-pos">
               <div class="hero-demo-drift">
               <div class="hero-demo-shell">
-                <div class="hero-demo-top-row">
+                <div class="hero-demo-expand-wrap">
                   <button
                     type="button"
                     class="hero-demo-expand demo-ui demo-ui-primary"
@@ -59,23 +59,6 @@
                         stroke-linejoin="round"
                       />
                     </svg>
-                  </button>
-                  <div class="hero-demo-timer-hit" data-hero-drag tabindex="-1">
-                    <span class="hero-demo-clock">7:10</span>
-                  </div>
-                  <button type="button" class="hero-demo-face" data-open-download aria-label="Creature">
-                    <span class="hero-demo-creature-pill" aria-hidden="true">
-                      <img
-                        class="hero-demo-creature-mouth"
-                        src="./assets/creature-face/hopeful.svg"
-                        alt=""
-                        width="60"
-                        height="30"
-                        draggable="false"
-                      />
-                      <!-- Dot eyes drawn on canvas (hero-demo-eyes.js); mouth SVG from hero-demo-live.js -->
-                      <canvas class="hero-demo-creature-eyes" aria-hidden="true"></canvas>
-                    </span>
                   </button>
                 </div>
 
@@ -122,7 +105,26 @@
                   </button>
                   <button type="button" class="demo-ui demo-ui-ghost" data-open-download>Reset</button>
                   <button type="button" class="demo-ui demo-ui-ghost" data-open-download>Pause</button>
-                  <button type="button" class="demo-ui demo-ui-ghost" data-open-download>Quit</button>
+                </div>
+
+                <div class="hero-demo-top-row">
+                  <button type="button" class="hero-demo-face" data-open-download aria-label="Creature">
+                    <span class="hero-demo-creature-pill" aria-hidden="true">
+                      <img
+                        class="hero-demo-creature-mouth"
+                        src="./assets/creature-face/hopeful.svg"
+                        alt=""
+                        width="60"
+                        height="30"
+                        draggable="false"
+                      />
+                      <!-- Dot eyes drawn on canvas (hero-demo-eyes.js); mouth SVG from hero-demo-live.js -->
+                      <canvas class="hero-demo-creature-eyes" aria-hidden="true"></canvas>
+                    </span>
+                  </button>
+                  <div class="hero-demo-timer-hit" data-hero-drag tabindex="-1">
+                    <span class="hero-demo-clock">7:10</span>
+                  </div>
                 </div>
 
                 <ul class="hero-demo-tasks">
