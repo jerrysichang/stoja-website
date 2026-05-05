@@ -2,6 +2,7 @@ const modal = document.getElementById("download-modal");
 const openButtons = document.querySelectorAll("[data-open-download]");
 const closeButtons = document.querySelectorAll("[data-close-download]");
 const yearEl = document.getElementById("year");
+const APP_STORE_URL = "https://apps.apple.com/us/app/stoja/id6761839249";
 let modalUnlockTimeoutId = null;
 let prevHtmlOverflow = "";
 let prevBodyOverflow = "";
@@ -61,7 +62,16 @@ function closeModal() {
 }
 
 openButtons.forEach((button) => {
-  button.addEventListener("click", openModal);
+  button.addEventListener("click", (event) => {
+    // Demo shell controls stay hoverable but inert.
+    if (button.closest(".hero-demo-shell")) {
+      event.preventDefault();
+      return;
+    }
+
+    event.preventDefault();
+    window.location.href = APP_STORE_URL;
+  });
 });
 
 closeButtons.forEach((button) => {

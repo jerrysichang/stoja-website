@@ -72,14 +72,17 @@
   align-items: center;
   gap: 10px;
   padding-top: 2px;
-  margin-bottom: 4px;
+  padding-inline: 12px;
+  margin-inline: -12px;
+  margin-bottom: 7px;
+  padding-bottom: 7px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.13);
 }
 
 .hero-demo-expand-wrap {
-  position: absolute;
-  top: 3px;
-  right: 12px;
+  position: relative;
   z-index: 5;
+  margin-left: auto;
 }
 
 /* PrimaryButton — expand/collapse chevron (AppShell PrimaryButton + collapsed sizing) */
@@ -94,7 +97,7 @@
   padding: 8px;
   margin: 0;
   border-radius: 10px;
-  border: 2px solid transparent;
+  border: 2px solid var(--demo-border-subtle);
   background: var(--demo-bg-elevated);
   color: var(--demo-accent);
   font-family: inherit;
@@ -121,7 +124,7 @@
   align-items: center;
   justify-content: flex-start;
   padding: 4px 2px;
-  padding-right: 63px;
+  padding-right: 4px;
   margin: -4px 0;
   cursor: default;
   touch-action: auto;
@@ -293,16 +296,29 @@
 
 .hero-demo-toolbar .demo-ui-ghost {
   letter-spacing: -0.1px;
+  color: var(--demo-accent);
+}
+
+.hero-demo-toolbar .demo-ui-ghost:hover:not(:disabled) {
+  color: rgba(255, 255, 255, 0.95) !important;
 }
 
 .hero-demo-edge-btn {
   align-self: stretch;
-  padding: 0 8px !important;
-  min-width: 16px;
+  width: 34px;
+  min-width: 34px;
+  padding: 0 !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.9) !important;
 }
 
 .hero-demo-edge-btn svg {
   display: block;
+  width: 17px;
+  height: 17px;
+  stroke: currentColor;
 }
 
 .hero-demo-edge-delete.demo-ui-ghost {
@@ -311,6 +327,14 @@
 
 .hero-demo-edge-delete.demo-ui-ghost:hover:not(:disabled) {
   color: var(--demo-hover-accent) !important;
+}
+
+.hero-demo-edge-btn:not(.hero-demo-edge-delete).demo-ui-ghost {
+  color: var(--demo-accent) !important;
+}
+
+.hero-demo-edge-btn:not(.hero-demo-edge-delete).demo-ui-ghost:hover:not(:disabled) {
+  color: rgba(255, 255, 255, 0.95) !important;
 }
 
 /* Task list — TaskListPanel / TaskRow */

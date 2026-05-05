@@ -156,13 +156,19 @@ img {
 }
 
 .brand-mark {
-  width: 38px;
-  height: 38px;
+  width: 58px;
+  height: 58px;
   border-radius: 11px;
   display: block;
   object-fit: contain;
   flex-shrink: 0;
   box-shadow: var(--shadow-soft);
+}
+
+@media (min-width: 861px) {
+  .site-header {
+    padding-top: 1.9rem;
+  }
 }
 
 .top-nav {
