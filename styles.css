@@ -143,7 +143,7 @@ img {
 
 .site-header .container {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
 }
 
@@ -166,7 +166,7 @@ img {
 }
 
 .top-nav {
-  display: flex;
+  display: none;
   align-items: center;
   gap: var(--space-4);
 }
