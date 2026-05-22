@@ -2,7 +2,7 @@ const modal = document.getElementById("download-modal");
 const openButtons = document.querySelectorAll("[data-open-download]");
 const closeButtons = document.querySelectorAll("[data-close-download]");
 const yearEl = document.getElementById("year");
-const APP_STORE_URL = "https://apps.apple.com/us/app/stoja/id6761839249";
+const APP_STORE_URL = "https://apps.apple.com/us/app/stoja/id6761839249?mt=12";
 let modalUnlockTimeoutId = null;
 let prevHtmlOverflow = "";
 let prevBodyOverflow = "";
@@ -54,25 +54,47 @@ function closeModal() {
     },
     { once: true }
   );
-  // Fallback in case transitionend is skipped/interrupted.
   modalUnlockTimeoutId = window.setTimeout(unlockBodyScroll, 320);
   modal.classList.remove("is-open");
-  // Deterministic unlock so scroll never remains stuck.
   unlockBodyScroll();
 }
 
 openButtons.forEach((button) => {
   button.addEventListener("click", (event) => {
-    // Demo shell controls stay hoverable but inert.
     if (button.closest(".hero-demo-shell")) {
       event.preventDefault();
       return;
     }
 
     event.preventDefault();
-    window.location.href = APP_STORE_URL;
+    window.open(APP_STORE_URL, "_blank", "noopener,noreferrer");
   });
 });
+
+(function initDownloadLinksNewTab() {
+  const selector =
+    'a.header-download, a.cta-download, a[href*="apps.apple.com/us/app/stoja"]';
+
+  function bindDownloadLink(link) {
+    if (link.dataset.downloadNewTab === "true") return;
+    link.dataset.downloadNewTab = "true";
+    link.setAttribute("target", "_blank");
+    link.setAttribute("rel", "noopener noreferrer");
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      window.open(link.href || APP_STORE_URL, "_blank", "noopener,noreferrer");
+    });
+  }
+
+  document.querySelectorAll(selector).forEach(bindDownloadLink);
+
+  const footer = document.querySelector("[data-site-footer]");
+  if (footer && typeof MutationObserver !== "undefined") {
+    new MutationObserver(() => {
+      document.querySelectorAll(selector).forEach(bindDownloadLink);
+    }).observe(footer, { childList: true, subtree: true });
+  }
+})();
 
 closeButtons.forEach((button) => {
   button.addEventListener("click", closeModal);
@@ -92,97 +114,87 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
-/**
- * Draggable hero preview: drag from the clock area (center of the top bar).
- */
-(function initHeroDemoDrag() {
-  // Dragging disabled by request.
-  return;
+(function initCtaDownloadFaceHover() {
+  const mouth = document.querySelector(".cta-creature-mouth");
+  if (!mouth) return;
 
+  const buttons = document.querySelectorAll(".header-download, .cta-download");
+  if (!buttons.length) return;
+
+  const HOVER_DELAY_MS = 500;
+  const LEAVE_DEBOUNCE_MS = 50;
+
+  const faces = {
+    default: {
+      src: "./assets/creature-face/hopeful.svg",
+      emotion: "hopeful",
+    },
+    hover: {
+      src: "./assets/creature-face/surprise.svg",
+      emotion: "surprise",
+    },
+  };
+
+  let delayTimer = null;
+  let leaveTimer = null;
+
+  function setFace(state) {
+    const face = faces[state];
+    mouth.src = face.src;
+    mouth.setAttribute("data-emotion", face.emotion);
+  }
+
+  function anyActive() {
+    return [...buttons].some((btn) => btn.matches(":hover") || btn === document.activeElement);
+  }
+
+  function clearDelayTimer() {
+    if (delayTimer) {
+      window.clearTimeout(delayTimer);
+      delayTimer = null;
+    }
+  }
+
+  function scheduleSurprise() {
+    clearDelayTimer();
+    delayTimer = window.setTimeout(() => {
+      delayTimer = null;
+      if (anyActive()) setFace("hover");
+    }, HOVER_DELAY_MS);
+  }
+
+  function syncFace() {
+    if (leaveTimer) {
+      window.clearTimeout(leaveTimer);
+      leaveTimer = null;
+    }
+
+    if (anyActive()) {
+      scheduleSurprise();
+      return;
+    }
+
+    clearDelayTimer();
+    leaveTimer = window.setTimeout(() => {
+      leaveTimer = null;
+      if (!anyActive()) setFace("default");
+    }, LEAVE_DEBOUNCE_MS);
+  }
+
+  buttons.forEach((btn) => {
+    btn.addEventListener("mouseenter", syncFace);
+    btn.addEventListener("mouseleave", syncFace);
+    btn.addEventListener("focus", syncFace);
+    btn.addEventListener("blur", syncFace);
+  });
 })();
 
 /**
- * Constant parallax shift for the floating shell, mapped to total page scroll:
- * starts at zero and reaches full rest offset exactly at scroll end.
- */
-(function initHeroDemoDocking() {
-  const stage = document.querySelector(".hero-demo-stage");
-  if (!stage) return;
-
-  const START_TOP_RATIO = 0.66;
-  const NARROW_BREAKPOINT_PX = 860;
-  const MEDIUM_BREAKPOINT_PX = 1200;
-  const END_TOP_RATIO_NARROW = 0.3;
-  /** Higher = shell rests lower at scroll end (see endPushY vs START_TOP_RATIO). */
-  /** Medium only: lower ratio = finishes higher on the viewport vs wide. */
-  const END_TOP_RATIO_MEDIUM = 0.46;
-  const END_TOP_RATIO_WIDE = 0.54;
-
-  function getEndTopRatio() {
-    const w = window.innerWidth;
-    if (w <= NARROW_BREAKPOINT_PX) return END_TOP_RATIO_NARROW;
-    if (w <= MEDIUM_BREAKPOINT_PX) return END_TOP_RATIO_MEDIUM;
-    return END_TOP_RATIO_WIDE;
-  }
-
-  function getScrollProgress() {
-    const maxPageScrollY = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-    return Math.min(1, Math.max(0, window.scrollY / maxPageScrollY));
-  }
-
-  function updateDockState() {
-    const viewportH = window.innerHeight;
-    const scrollProgress = getScrollProgress();
-
-    const endTopRatio = getEndTopRatio();
-    const endPushY = -viewportH * (START_TOP_RATIO - endTopRatio);
-
-    const pushY = endPushY * scrollProgress;
-
-    stage.style.setProperty("--hero-stage-push", `${pushY.toFixed(2)}px`);
-  }
-
-  window.addEventListener("scroll", updateDockState, { passive: true });
-  window.addEventListener("resize", updateDockState);
-  updateDockState();
-})();
-
-/**
- * Anchored cursor-lean motion:
- * stays pinned to its base location, leans toward cursor, then returns to base.
- */
-(function initHeroDemoCursorFollow() {
-  const pos = document.getElementById("hero-demo-pos");
-  if (!pos) return;
-
-  const anchor = { x: 0, y: 0 };
-
-  function readOffsetsFromTransform() {
-    const t = pos.style.transform || "";
-    const m = t.match(/-50% \+ (-?\d+(?:\.\d+)?)px\), calc\(-50% \+ (-?\d+(?:\.\d+)?)px\)/);
-    if (!m) return null;
-    return { x: Number(m[1]), y: Number(m[2]) };
-  }
-
-  const initial = readOffsetsFromTransform();
-  if (initial) {
-    anchor.x = initial.x;
-    anchor.y = initial.y;
-  }
-
-  function frame() {
-    pos.style.transform = `translate(calc(-50% + ${anchor.x.toFixed(2)}px), calc(-50% + ${anchor.y.toFixed(2)}px))`;
-
-    window.requestAnimationFrame(frame);
-  }
-
-  window.requestAnimationFrame(frame);
-})();
-
-/**
- * Homepage background mask follows the floating shell position.
+ * Homepage background mask follows the sticky demo position.
  */
 (function initCursorMaskTracking() {
+  if (document.body.classList.contains("home-page")) return;
+
   const stage = document.querySelector(".hero-demo-stage");
 
   function setMaskPosition(x, y) {
@@ -197,91 +209,6 @@ document.addEventListener("keydown", (event) => {
     } else {
       setMaskPosition(window.innerWidth * 0.5, window.innerHeight * 0.5);
     }
-    window.requestAnimationFrame(frame);
-  }
-
-  window.requestAnimationFrame(frame);
-})();
-
-/**
- * Tagline word avoidance: words are pushed away from the floating shell.
- */
-(function initTaglineWordAvoidance() {
-  const pos = document.getElementById("hero-demo-pos");
-  const words = Array.from(document.querySelectorAll(".tagline-word"));
-  if (!pos || words.length === 0) return;
-
-  const EFFECT_RADIUS_PX = 460;
-  const MAX_PUSH_PX = 118;
-  const WIDE_MAX_PUSH_MULT = 1.45;
-  const WIDE_LATERAL_K = 0.95;
-  const EASE = 0.18;
-  const NARROW_BREAKPOINT_PX = 860;
-
-  const state = new WeakMap();
-  words.forEach((word) => state.set(word, { x: 0, y: 0 }));
-
-  function getLateralScale(word) {
-    const raw = word.dataset.lateral;
-    if (raw == null || raw === "") return 1;
-    const n = Number(raw);
-    if (!Number.isFinite(n)) return 1;
-    if (n <= 0) return 0;
-    return n;
-  }
-
-  function frame() {
-    const shellRect = pos.getBoundingClientRect();
-    const shellCx = shellRect.left + shellRect.width * 0.5;
-    const shellCy = shellRect.top + shellRect.height * 0.5;
-    const shellRadius = Math.hypot(shellRect.width, shellRect.height) * 0.5;
-    const influenceRadius = shellRadius + EFFECT_RADIUS_PX;
-
-    for (const word of words) {
-      const rect = word.getBoundingClientRect();
-      const wx = rect.left + rect.width * 0.5;
-      const wy = rect.top + rect.height * 0.5;
-
-      let dx = wx - shellCx;
-      let dy = wy - shellCy;
-      let dist = Math.hypot(dx, dy);
-      if (dist < 0.001) {
-        dx = 1;
-        dy = 0;
-        dist = 1;
-      }
-
-      let tx = 0;
-      let ty = 0;
-      if (dist < influenceRadius) {
-        const outsideFromEdge = Math.max(0, dist - shellRadius);
-        const t = 1 - outsideFromEdge / EFFECT_RADIUS_PX;
-        const isWide = word.dataset.wide === "true";
-        const pushMax = MAX_PUSH_PX * (isWide ? WIDE_MAX_PUSH_MULT : 1);
-        const push = pushMax * t * t;
-        const radialX = (dx / dist) * push;
-        const radialY = (dy / dist) * push;
-        const isNarrow = window.innerWidth <= NARROW_BREAKPOINT_PX;
-
-        if (isNarrow) {
-          tx = 0;
-          ty = radialY;
-        } else {
-          const flowDir = word.dataset.flow === "left" ? -1 : 1;
-          const lateralScale = getLateralScale(word);
-          const lateralKBase = isWide ? WIDE_LATERAL_K : 0.72;
-          const lateralBias = flowDir * push * lateralKBase * lateralScale;
-          tx = radialX + lateralBias;
-          ty = radialY * 0.55;
-        }
-      }
-
-      const s = state.get(word);
-      s.x += (tx - s.x) * EASE;
-      s.y += (ty - s.y) * EASE;
-      word.style.transform = `translate3d(${s.x.toFixed(2)}px, ${s.y.toFixed(2)}px, 0)`;
-    }
-
     window.requestAnimationFrame(frame);
   }
 

@@ -3,7 +3,7 @@
  * + low-time emotion rotation). See DEFAULT_CREATURE_BEHAVIOR_CONFIG in useCreatureState.ts.
  */
 (function initHeroDemoLive() {
-  const shell = document.querySelector(".hero-demo-shell");
+  const shell = document.getElementById("scroll-demo-shell");
   if (!shell) return;
 
   const CONFIG = {

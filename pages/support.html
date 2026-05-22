@@ -9,14 +9,19 @@
   </head>
   <body>
     <header class="site-header">
-      <div class="container">
+      <div class="container site-header-inner">
         <a class="brand" href="../index.html" aria-label="Stoja home">
-          <img class="brand-mark" src="../assets/brand-logo.png" alt="" width="38" height="38" />
+          <img class="brand-mark" src="../assets/stoja-icon.png" alt="" width="32" height="32" />
+          <span class="brand-name">Stoja</span>
         </a>
         <nav class="top-nav" aria-label="Primary">
-          <button class="button button-primary" type="button" data-open-download>
-            Download Stoja
-          </button>
+          <a
+            class="link-muted header-download"
+            href="https://apps.apple.com/us/app/stoja/id6761839249?mt=12"
+            target="_blank"
+            rel="noreferrer"
+            >Download</a
+          >
         </nav>
       </div>
     </header>
@@ -58,20 +63,7 @@
       </div>
     </main>
 
-    <footer class="site-footer">
-      <div class="container">
-        <nav class="footer-leading" aria-label="Footer primary">
-          <a class="link-muted" href="./support.html">Support</a>
-          <button type="button" class="footer-text-btn link-muted" data-open-download>Download</button>
-        </nav>
-        <div class="legal-links">
-          <a class="link-muted" href="./legal.html">Legal</a>
-          <a class="link-muted" href="./terms.html">Terms of use</a>
-          <a class="link-muted" href="./privacy.html">Privacy policy</a>
-          <span class="muted">© <span id="year"></span> Stoja</span>
-        </div>
-      </div>
-    </footer>
+    <footer class="site-footer" data-site-footer></footer>
 
     <div class="modal-overlay" id="download-modal" aria-hidden="true" role="dialog">
       <div class="modal" aria-modal="true" aria-labelledby="download-title">
@@ -82,7 +74,7 @@
         <div class="panel">
           <p><strong>Current release:</strong> v0.1.0 (placeholder)</p>
           <p>
-            <a class="button button-primary" href="https://apps.apple.com/us/app/stoja/id6761839249" target="_blank" rel="noreferrer">
+            <a class="button button-primary" href="https://apps.apple.com/us/app/stoja/id6761839249?mt=12" target="_blank" rel="noreferrer">
               Download on the App Store
             </a>
           </p>
@@ -92,6 +84,7 @@
       </div>
     </div>
 
+    <script src="../footer.js"></script>
     <script src="../script.js"></script>
   </body>
 </html>
