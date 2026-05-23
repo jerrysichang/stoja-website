@@ -159,7 +159,7 @@ body.home-page .site-header {
   display: inline-flex;
   align-items: center;
   gap: 0.55rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.02em;
   text-decoration: none;
   color: inherit;
@@ -168,7 +168,7 @@ body.home-page .site-header {
 .brand-name {
   font-family: var(--font-display);
   font-size: 1.05rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.01em;
   color: var(--color-text);
 }
