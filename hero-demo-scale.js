@@ -66,6 +66,14 @@
     title.style.fontSize = `${best}px`;
   }
 
+  function applyHeroDemoShadow(frame, scale) {
+    const y1 = Math.round(28 * scale);
+    const blur1 = Math.round(72 * scale);
+    const y2 = Math.round(12 * scale);
+    const blur2 = Math.round(32 * scale);
+    frame.style.boxShadow = `0 ${y1}px ${blur1}px rgba(0, 0, 0, 0.5), 0 ${y2}px ${blur2}px rgba(0, 0, 0, 0.28)`;
+  }
+
   function applySharedDemoWidth(targetWidth, scale) {
     const ctaFace = document.querySelector(".cta-face");
     if (ctaFace) {
@@ -94,6 +102,7 @@
       frame.style.height = `${Math.round(contentHeight * scale)}px`;
       frame.style.borderRadius = `${Math.round(SHELL_RADIUS * scale)}px`;
       frame.style.zoom = "";
+      applyHeroDemoShadow(frame, scale);
 
       app.style.width = `${BASE_WIDTH}px`;
       app.style.height = `${contentHeight}px`;

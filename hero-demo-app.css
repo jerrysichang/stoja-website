@@ -32,9 +32,7 @@
 .hero-demo-shell.hero-demo-shell--landing {
   transform: none;
   border: 1px solid rgba(42, 235, 185, 0.32);
-  box-shadow:
-    0 16px 32px rgba(0, 0, 0, 0.45),
-    0 4px 12px rgba(0, 0, 0, 0.22);
+  box-shadow: inset 0 0 0 1px var(--demo-border-subtle);
   backface-visibility: hidden;
 }
 
